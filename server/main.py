@@ -1,1 +1,3 @@
-print("hello world")
+import ratemyprofessor
+
+print("sys.path")
