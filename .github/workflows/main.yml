@@ -20,6 +20,7 @@ jobs:
       with:
         name: 'function-1'
         runtime: 'python39'
+        source_dir: 'server'
 
     # Example of using the output
     - id: 'test'
