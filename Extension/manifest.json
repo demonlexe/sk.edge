@@ -12,5 +12,8 @@
       "matches": ["https://utdallas.collegescheduler.com/terms/*/courses/*"],
       "css": ["content-script/styles.css"],
       "js": ["content-script/index.js"]
-    }]
+    }],
+    "permissions": [
+      "storage"
+    ]
   }

@@ -1,6 +1,12 @@
+body {
+    padding: 15px;
+}
 .hiddenElement {
     visibility: hidden;
 }
 .visibleElement {
     visibility: visible;
+}
+.highlightedElement {
+    background-color: rgb(255, 117, 117);
 }
