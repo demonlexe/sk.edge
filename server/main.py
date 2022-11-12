@@ -1,7 +1,7 @@
 import functions_framework
 
 @functions_framework.http
-def hello_http(request):
+def get_professor(request):
    """HTTP Cloud Function.
    Args:
        request (flask.Request): The request object.
