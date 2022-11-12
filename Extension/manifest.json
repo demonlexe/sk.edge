@@ -7,6 +7,12 @@
       "default_popup": "main.html",
       "default_icon": "hello_extensions.png"
     },
+    "content_scripts": [
+    {
+      "matches": ["https://utdallas.collegescheduler.com/terms/*/courses/*"],
+      "css": ["content-script/styles.css"],
+      "js": ["content-script/index.js"]
+    }],
     "permissions": [
       "storage"
     ]
