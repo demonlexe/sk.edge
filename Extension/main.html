@@ -4,20 +4,31 @@
 
     <link rel="stylesheet" href="styles.css">
     <body>
-        <div id="setup-page">
+        <div id="setup-page" class="mainPg">
             <h2>Let's get you set up! :))))</h2>
             <br></br>
-            <h3>GPA:</h3>
+            <h4>GPA:</h4>
             <input type="number" id="input-gpa"></input>
-            <h3>School:</h3>
+            <h4>School:</h4>
             <input type="text" id="input-school"></input>
             <br></br>
             <button id="send-button">Send</button>
         </div>
-        <div id="dashboard-page" class="hiddenElement">
-            <h1>Welcome to INTEGRA!</h1>
+        <div id="dashboard-page" class="mainPg hiddenElement">
+            <button class="topRightBtn btn" id="settings-btn">⚙</button>
+            <h2>Welcome to INTEGRA!</h2>
+        </div>
+        <div id="settings-page" class="mainPg hiddenElement">
+            <button class="topRightBtn btn" id="back-btn">⮌</button>
+            <h2>SETTINGS</h2>
+            <h4>GPA:</h4>
+            <input type="number" id="settings-gpa"></input>
+            <h4>School:</h4>
+            <input type="text" id="settings-school"></input>
+            <br></br>
+            <button id="save-btn">Save</button>
         </div>
     </body>
-    <script src="setup.js"></script>
+    <script type="module" src="index.js"></script>
 
 </html>

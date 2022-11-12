@@ -1,4 +1,4 @@
-body {
+.mainPg {
     padding: 15px;
 }
 .hiddenElement {
@@ -9,4 +9,7 @@ body {
 }
 .highlightedElement {
     background-color: rgb(255, 117, 117);
+}
+.topRightBtn {
+    float: right;
 }
