@@ -1,6 +1,6 @@
 import functions_framework
 
-from server.controller import get_professor_ctrl
+from controller import get_professor_ctrl
 
 @functions_framework.http
 def get_professor(request):
