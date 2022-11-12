@@ -1,4 +1,5 @@
-# we had to fix it for our use
+# This isnt written by us, but we had to fix it for our use so we couldnt use pip install 
+# Find the package @ https://pypi.org/project/RateMyProfessorAPI/
 """
 ratemyprofessor
 
