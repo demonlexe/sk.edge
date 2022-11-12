@@ -18,8 +18,9 @@ jobs:
     - id: 'deploy'
       uses: 'google-github-actions/deploy-cloud-functions@v0'
       with:
-        name: 'function-1'
+        name: 'get_professor'
         runtime: 'python39'
+        source_dir: 'server'
 
     # Example of using the output
     - id: 'test'
