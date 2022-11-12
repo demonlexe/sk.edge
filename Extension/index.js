@@ -3,12 +3,12 @@ let setupPg = $("#setup-page");
 let settingsPg = $("#settings-page");
 let dashPg = $("#dashboard-page");
 
-function saveSettingsClicked() {
+async function saveSettingsClicked() {
     let gpa = $("#settings-gpa").val();
     let school = $("#settings-school").val();
     if (gpa && school && gpa.length >= 1 && school.length >= 3) {
-        setData('student_gpa',gpa);
-        setData('student_school',school);
+        await setData('student_gpa',gpa);
+        await setData('student_school',school);
     } else {
         if (!gpa || gpa.length < 1) {
             $("#input-gpa").addClass("highlightedElement");
@@ -29,13 +29,14 @@ function settingsBackBtnClick(backBtn, goTo) {
     settingsPg.detach();
 }
 
-function settingsClicked() {
+async function settingsClicked() {
     dashPg = dashPg.detach();
     settingsPg.removeClass("hiddenElement");
     $("body").prepend(settingsPg);
 
-    let gpa = getData('student_gpa');
-    let school = getData('student_school');
+    let gpa = await getData('student_gpa');
+    console.log("settingsClicked(): gpa is ",gpa)
+    let school = await getData('student_school');
     let gpaElem = $("#settings-gpa");
     let schoolElem = $("#settings-school");
     if (gpaElem && schoolElem)
@@ -49,15 +50,15 @@ function settingsClicked() {
     }
 }
 
-function setupClicked() {
+async function setupClicked() {
     let gpa = $("#input-gpa").val();
     let school = $("#input-school").val();
     if (gpa && school && gpa.length >= 1 && school.length >= 3) {
         setupPg = setupPg.detach();
         dashPg.removeClass("hiddenElement");
-        setData('student_gpa',gpa);
-        setData('student_school',school);
-        setData('user_setup_complete',true);
+        await setData('student_gpa',gpa);
+        await setData('student_school',school);
+        await setData('user_setup_complete',true);
     } else {
         if (!gpa || gpa.length < 1) {
             $("#input-gpa").addClass("highlightedElement");
@@ -74,7 +75,8 @@ function checkLength(elem, num) {
     }
 }
 
-let isComplete = getData('user_setup_complete');
+const isComplete = await getData('user_setup_complete');
+console.log("The value of isComplete is " + isComplete);
 if (isComplete != null && isComplete == true) {
     // Then user has already completed setup and we have their data.
     setupPg = setupPg.detach();
