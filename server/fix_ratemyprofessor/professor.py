@@ -148,6 +148,9 @@ class Professor:
 
     def __eq__(self, other):
         return (self.name, self.department, self.school) == (other.name, other.department, other.school)
+    
+    def __serialize__(self):
+        return {"name": self.name, "department": self.department, "difficulty": self.difficulty, "rating": self.rating, "would_take_again": self.would_take_again, "num_ratings": self.num_ratings}
 
 
 class Course:
