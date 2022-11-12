@@ -1,3 +1,10 @@
-import ratemyprofessor
+import functions_framework
 
-print("sys.path")
+from controller import get_professor_ctrl
+
+@functions_framework.http
+def get_professor(request):
+   # request_json = request.get_json(silent=True)
+   response = get_professor_ctrl(request.args.get("school"), request.args.get("name"))
+
+   return response
