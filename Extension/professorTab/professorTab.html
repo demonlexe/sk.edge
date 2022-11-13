@@ -5,6 +5,10 @@
         <title>Integra</title>
         <link rel="stylesheet" href="../styles.css">
         <link href="../assets/bootstrap.min.css" rel="stylesheet">
+		<script type='text/javascript' src='../assets/chart.js'></script>
+		<script src="../assets/bootstrap.bundle.min.js"></script>
+		<script src="../assets/jquery-3.6.1.js"></script>
+		<script type="module" src="./professorTab.js"></script>
       </head>
       
     <body style="min-width:200px;">
@@ -17,54 +21,26 @@
                                 <div class="row">
                                     <div class="col d-flex justify-content-evenly align-items-center">
                                         <button class="btn btn-secondary btn-sm inline-with-padding">&lt;</button>
-                                        <h2 class="inline-with-padding">Jason Smith</h2>
+                                        <h2 id="prof-name" class="inline-with-padding"></h2>
                                         <button class="btn btn-secondary btn-sm inline-with-padding">&gt;</button>
                                     </div>
                                 </div>
-                                <div class="row d-flex align-items-center justify-content-evenly">
-                                  <div class="col">
-                                    <button type="button" class="btn btn-outline-dark btn-lg">
-                                        <h5>Rating</h5>
-                                        <h2 id="professor-rating-val" style="color: green;">4 / 5</h2>
-                                    </button>
-                                  </div>
-                                  <div class="col d-flex flex-wrap justify-content-center align-items-center p-0 my-4 ">
-                                    <button type="button" class="btn btn-light text-wrap"
-                                        style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-                                        Tough Grader
-                                    </button>
-                                    <button type="button" class="btn btn-light text-wrap"
-                                        style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-                                        Smart
-                                    </button>
-                                    <button type="button" class="btn btn-light"
-                                        style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-                                        Helpful
-                                    </button>
-                                    <button type="button" class="btn btn-light"
-                                        style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-                                        Engaging
-                                    </button>
+                                <div id="prof-rmp-row" class="row d-flex align-items-center justify-content-evenly">
+									<div class="col">
+										<button type="button" class="btn btn-outline-dark btn-lg">
+											<h5>Rating</h5>
+											<h2><span id="prof-rating-val"></span> / 5</h2>
+										</button>
+									</div>
                                 </div>
-                                    </div>
-                                        <class="row">
-                                            <div class="col"> 
-                                                <button class="btn btn-secondary btn-sm inline-with-padding"><</button>
-                                            <button type="button" class="inline-with-padding btn btn-success text-wrap"
-                                                style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-                                                Reddit
-                                            </button>
-                                            <button class="btn btn-secondary btn-sm inline-with-padding">></button>
-                                        
-                                            </div>
-                                        </div>
+								<div id="grades-container" class="row">
+									<h5>Grade Distribution</h5>
+								</div>
+							</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </body>
-    <script src="../assets/bootstrap.bundle.min.js"></script>
-    <script src="../assets/jquery-3.6.1.js"></script>
-    <script src="professorTab.js"></script>
 </html>
