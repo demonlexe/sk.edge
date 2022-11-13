@@ -55,7 +55,7 @@ data.forEach((elem, idx) => {
 
     $(`#prof-details-button-${idx}`).on("click", () => {
         console.log("clicked");
-        window.location = "./professorTab/professorTab.html?professorId=" + elem.professorId;
+        window.location = "../professorTab/professorTab.html?professorId=" + elem.professorId;
     });
 
     // if no grade data
