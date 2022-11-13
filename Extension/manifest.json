@@ -9,11 +9,21 @@
     },
     "content_scripts": [
     {
-      "matches": ["https://utdallas.collegescheduler.com/terms/*/courses/*"],
+      "matches": ["*://utdallas.collegescheduler.com/terms/*/courses/*"],
       "css": ["content-script/styles.css"],
       "js": ["content-script/index.js"]
     }],
+    "background": {
+        "service_worker": "background.js"
+    },
     "permissions": [
-      "storage"
+      "storage",
+      "scripting",
+      "tabs",
+      "activeTab",
+      "webNavigation"
+    ],
+    "host_permissions": [
+        "*://utdallas.collegescheduler.com/terms/*/courses/*"
     ]
   }
