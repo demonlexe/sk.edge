@@ -26,5 +26,6 @@ def get_professors_ctrl(school_name: str, prof_names):
         prof: Professor = get_professor_by_school_and_name(school, x)
         if prof is None:
             print("Prof", x, "not found!")
-        prof_list.append(prof.__serialize__())
+        else:
+            prof_list.append(prof.__serialize__())
     return jsonify(prof_list)
