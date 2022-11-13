@@ -58,7 +58,7 @@ data.forEach((elem, idx) => {
                     <div class="card h-100 btn btn-light" id="rmp-${idx}" style="cursor: pointer;">
                         <div class="card-body px-0 d-flex flex-column justify-content-center">
                             <h6 class="card-subtitle mb-1 text-muted text-center">RMP SCORE</h6>
-                            <h2 class="card-title text-center">${elem.rmp} / 5</h2>
+                            <h2 class="card-title text-center"><span id="rmp-score-${idx}"></span> / 5</h2>
                         </div>
                     </div>
                 </div>
@@ -67,6 +67,17 @@ data.forEach((elem, idx) => {
             </div>
         </div>`
     );
+
+    $(`#rmp-score-${idx}`).text(elem.rmp ?? "N/A");
+    if (elem.rmp < 2) {
+        $(`#rmp-score-${idx}`).css("color", "red");
+    } else if (elem.rmp < 4) {
+        $(`#rmp-score-${idx}`).css("color", "orange");
+    } else if (elem.rmp < 3) {
+        $(`#rmp-score-${idx}`).css("color", "green");
+    } else {
+        $(`#rmp-score-${idx}`).css("color", "lime");
+    }
 
     $(`#rmp-${idx}`).click(() => {
         window.open(`https://www.ratemyprofessors.com/professor?tid=${elem.id}`,'_blank');
