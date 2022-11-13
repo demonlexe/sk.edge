@@ -1,11 +1,13 @@
 
 chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
-	chrome.scripting.executeScript({
-		target: {
-			tabId: details.tabId,
-		},
-		files: ["./content-script/index.js"]
-	});
+	if (/^.*:\/\/utdallas\.collegescheduler\.com\/terms\/.*\/courses\/.+$/.test(details.url)) {
+		chrome.scripting.executeScript({
+			target: {
+				tabId: details.tabId,
+			},
+			files: ["./content-script/index.js"]
+		});
+	}
 });
 
 const messageType = {
