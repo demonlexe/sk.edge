@@ -1,5 +1,19 @@
 console.log("Content script loaded");
 
+const messageType = {
+	SHOW_COURSE_TAB: 'SHOW_COURSE_TAB',
+	SHOW_PROFESSOR_TAB: 'SHOW_PROFESSOR_TAB',
+}
+
+// send event to to extension to show the course info tab
+chrome.runtime.sendMessage({
+	type: messageType.SHOW_COURSE_TAB,
+	payload: {
+		coursePrefix: "CS",
+		courseNumber: "1337"
+	}
+});
+
 function waitForElement(selector) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
@@ -21,7 +35,6 @@ function waitForElement(selector) {
 }
 
 waitForElement('table').then((courseTable) => {
-	console.log('Table found');
 	// console.log(courseTable);
 	const courseRows = courseTable.querySelectorAll('tbody');
 	courseRows.forEach((courseRow) => {
@@ -30,6 +43,7 @@ waitForElement('table').then((courseTable) => {
 		// get professor name from course row
 		const sectionDetailsButton = courseRow.querySelector('tr > td > button');
 		// console.log(sectionDetailsButton);
+		// expand section details to load the details
 		sectionDetailsButton.click();
 		const sectionDetails = courseRow.querySelector('tr:nth-child(2)');
 		// console.log(sectionDetails);
@@ -41,5 +55,7 @@ waitForElement('table').then((courseTable) => {
 				console.log(professor);
 			}
 		})
+		// collapse section details
+		sectionDetailsButton.click();
 	});
 });

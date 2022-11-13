@@ -1,3 +1,27 @@
+
+const messageType = {
+	SHOW_COURSE_TAB: 'SHOW_COURSE_TAB',
+	SHOW_PROFESSOR_TAB: 'SHOW_PROFESSOR_TAB',
+}
+
+// listen for messages from the content script
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    switch (request.type) {
+        case messageType.SHOW_COURSE_TAB:
+            console.log("SHOW_COURSE_TAB");
+            const { coursePrefix, courseNumber } = request.payload;
+            console.log(coursePrefix, courseNumber);
+            break;
+        case messageType.SHOW_PROFESSOR_TAB:
+            console.log("SHOW_PROFESSOR_TAB");
+            break;
+        default:
+            console.log("Unknown message type");
+    }
+  }
+);
+
 import { getData, setData } from "./chrome_store.js";
 let setupPg = $("#setup-page");
 let settingsPg = $("#settings-page");
