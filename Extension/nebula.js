@@ -191,11 +191,15 @@ export async function getProfessorGradeList(
         // console.log(professorInfo);
         if (!professorInfo) {
             professorCourseInfoList.push({
+                id: null,
                 professor: professorName,
                 professorId: getProfessorId(professor),
-                // rmp: 5.0, //gets updated later
+                rmp: "_",
                 grades: null,
                 endDate: null,
+                numRatings: 0,
+                subjectPrefix,
+                courseNumber,
             });
             continue;
         }
@@ -218,10 +222,10 @@ export async function getProfessorGradeList(
             id: 0,
             professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
-            // rmp: 5.0, //gets updated later
             grades: mostRecentDist,
             endDate: mostRecentEndDate,
-            numRatings: 0,
+            subjectPrefix,
+            courseNumber,
         });
     }
 
