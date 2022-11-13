@@ -13,3 +13,7 @@
 .topRightBtn {
     float: right;
 }
+
+body {
+    min-width:500px;
+}
