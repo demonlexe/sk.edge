@@ -193,7 +193,7 @@ export async function getProfessorGradeList(
             professorCourseInfoList.push({
                 professor: professorName,
                 professorId: getProfessorId(professor),
-                rmp: 5.0,
+                // rmp: 5.0, //gets updated later
                 grades: null,
                 endDate: null,
             });
@@ -218,7 +218,7 @@ export async function getProfessorGradeList(
             id: 0,
             professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
-            rmp: 5.0,
+            // rmp: 5.0, //gets updated later
             grades: mostRecentDist,
             endDate: mostRecentEndDate,
             numRatings: 0,
@@ -237,6 +237,8 @@ export async function getProfessorGradeList(
                 professorCourseInfoList[i].numRatings = data[j].num_ratings;
                 professorCourseInfoList[i].id = data[j].rmp_id;
                 professorCourseInfoList[i].rmpTags = getRandomRpmTags();
+                professorCourseInfoList[i].difficulty = data[j].difficulty;
+                professorCourseInfoList[i].wouldTakeAgainPercent = data[j].would_take_again;
             }
         }
     }
