@@ -13,7 +13,7 @@ function getData() {
         // check if course has been cached 
         const lastCourseFetched = await getLocalStorage("last_course_fetched");
         await setLocalStorage("professors", professors);
-        if (subjectPrefix == lastCourseFetched.subjectPrefix && courseNumber == lastCourseFetched.courseNumber) {
+        if (subjectPrefix == lastCourseFetched?.subjectPrefix && courseNumber == lastCourseFetched?.courseNumber) {
             console.log("Using cached professor data");
             const data = await getLocalStorage("professor_data");
             resolve(data);
