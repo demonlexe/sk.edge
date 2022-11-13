@@ -1,16 +1,4 @@
-// const data = [
-//     {
-//         professor: "John Cole",
-//         rmp: 5,
-//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-//     },
-//     {
-//         professor: "Johnba Cole",
-//         rmp: 3,
-//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-//     },
-// ];
-import { setData } from "../chrome_store.js";
+import { getLocalStorage, setLocalStorage } from "../localStorage.js";
 import { createGradeChart } from "../common/gradeChart.js";
 import { getProfessorGradeList } from "../nebula.js";
 
@@ -20,18 +8,39 @@ const courseNumber = params.get("courseNumber");
 const professors = params.get("professors").split(",");
 console.log(subjectPrefix, courseNumber, professors);
 
-const parsedProfessors = []
-professors.forEach(elem => {
-    const arr = elem.split(' ');
-    parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
-});
+function getData() {
+    return new Promise(async (resolve) => {
+        // check if course has been cached 
+        const lastCourseFetched = await getLocalStorage("last_course_fetched");
+        await setLocalStorage("professors", professors);
+        if (subjectPrefix == lastCourseFetched?.subjectPrefix && courseNumber == lastCourseFetched?.courseNumber) {
+            console.log("Using cached professor data");
+            const data = await getLocalStorage("professor_data");
+            resolve(data);
+        }
+        else {
+            console.log("Fetching professor data");
+            const parsedProfessors = []
+            professors.forEach(elem => {
+                const arr = elem.split(' ');
+                parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
+            });
 
-const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
-console.log("got data:",data);
-setData('professor_data', data);
+            const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
+            await setLocalStorage("professor_data", data);
+            await setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+            await setLocalStorage("professors", professors);
+            resolve(data);
+        }
+    });
+}
+
+const data = await getData();
 
 //Detach the spinner when the data has been obtained.
 let mySpinner = $("#spinner-div").detach();
+// $(`#prof-table`).append(`<div class="p-2 bg-light border" id="course">${subjectPrefix + courseNumber}</div>`);
+
 
 data.forEach((elem, idx) => {
 
@@ -49,7 +58,7 @@ data.forEach((elem, idx) => {
                     <div class="card h-100 btn btn-light" id="rmp-${idx}" style="cursor: pointer;">
                         <div class="card-body px-0 d-flex flex-column justify-content-center">
                             <h6 class="card-subtitle mb-1 text-muted text-center">RMP SCORE</h6>
-                            <h2 class="card-title text-center">${elem.rmp} / 5</h2>
+                            <h2 class="card-title text-center"><span id="rmp-score-${idx}"></span> / 5</h2>
                         </div>
                     </div>
                 </div>
@@ -58,6 +67,17 @@ data.forEach((elem, idx) => {
             </div>
         </div>`
     );
+
+    $(`#rmp-score-${idx}`).text(elem.rmp ?? "N/A");
+    if (elem.rmp < 2) {
+        $(`#rmp-score-${idx}`).css("color", "red");
+    } else if (elem.rmp < 3) {
+        $(`#rmp-score-${idx}`).css("color", "orange");
+    } else if (elem.rmp < 4) {
+        $(`#rmp-score-${idx}`).css("color", "green");
+    } else {
+        $(`#rmp-score-${idx}`).css("color", "lime");
+    }
 
     $(`#rmp-${idx}`).click(() => {
         window.open(`https://www.ratemyprofessors.com/professor?tid=${elem.id}`,'_blank');
@@ -83,46 +103,5 @@ data.forEach((elem, idx) => {
     );
     // get chart place
     const ctx = document.getElementById(`grades-${idx}`).getContext('2d');
-    createGradeChart(ctx, elem.grades);
+    createGradeChart(ctx, elem.grades[0].distribution);
 });
-
-// const ctx = document.getElementById('myChart').getContext('2d');
-// const myChart = new Chart(ctx, {
-//     type: 'bar',
-//     data: {
-//         labels: ['A+', 'A', 'B', 'C', 'D', 'F'],
-//         datasets: [{
-//             data: [12, 19, 3, 5, 2, 3],
-//             backgroundColor: [
-//                 'rgba(255, 99, 132, 0.2)',
-//                 'rgba(54, 162, 235, 0.2)',
-//                 'rgba(255, 206, 86, 0.2)',
-//                 'rgba(75, 192, 192, 0.2)',
-//                 'rgba(153, 102, 255, 0.2)',
-//                 'rgba(255, 159, 64, 0.2)'
-//             ],
-//             borderColor: [
-//                 'rgba(255, 99, 132, 1)',
-//                 'rgba(54, 162, 235, 1)',
-//                 'rgba(255, 206, 86, 1)',
-//                 'rgba(75, 192, 192, 1)',
-//                 'rgba(153, 102, 255, 1)',
-//                 'rgba(255, 159, 64, 1)'
-//             ],
-//             borderWidth: 1
-//         }]
-//     },
-//     options: {
-//         scales: {
-//             y: {
-//                 beginAtZero: true
-//             }
-//         },
-//         responsive: false,
-//         plugins: {
-//             legend: {
-//                 display: false
-//             }
-//         }
-//     }
-// });

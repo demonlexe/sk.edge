@@ -16,40 +16,38 @@
             <div class="card" style="width: 22rem;">
                 <div class="card-body">
                     <div class="center-block">
-						<!-- <button id="return-btn" class="btn btn-outline-primary hang-right m-0 p-1 px-2"> ⮌ </button> -->
+						<button id="return-btn" class="btn btn-outline-primary hang-right m-0 p-1 px-2"> ⮌ </button>
                         <div>
                             <div class="container text-center d-flex flex-column">
                                 <div class="row">
                                     <div class="col d-flex justify-content-evenly align-items-center">
-                                        <button class="btn btn-secondary btn-sm inline-with-padding">&lt;</button>
                                         <h2 id="prof-name" class="inline-with-padding"></h2>
-                                        <button class="btn btn-secondary btn-sm inline-with-padding">&gt;</button>
                                     </div>
                                 </div>
-                                <div id="prof-rmp-row-1" class="row my-2 d-flex justify-content-around">
-									<div class="col">
-										<button type="button" class="btn btn-outline-dark btn-lg">
-											<h5>Rating</h5>
-											<h2><span id="prof-rating-val"></span> / 5</h2>
+                                <div id="prof-rmp-row-1" class="row my-2 px-5 d-flex justify-content-around">
+										<button type="button" class="btn btn-outline-dark btn-lg col" style="margin-right: 3px;">
+                                            <h6 class="mb-1 text-muted text-center">RATING</h6>
+											<h4><span id="prof-rating-val"></span> / 5</h4>
 										</button>
-                                        <button type="button" class="btn btn-outline-dark btn-lg">
-                                            <h5>Difficulty</h5>
-                                            <h2><span id="prof-difficulty-val"></span> / 5</h2>
+                                        <button type="button" class="btn btn-outline-dark btn-lg col" style="margin-left: 3px;">
+                                            <h6 class="mb-1 text-muted text-center">DIFFICULTY</h6>
+                                            <h4><span id="prof-difficulty-val"></span> / 5</h4>
                                         </button>
-									</div>
                                 </div>
-                                <div id="prof-rmp-row-2">
-                                    <button type="button" class="btn btn-outline-dark btn-lg">
-                                        <h5>Would Take Again</h5>
-                                        <h2><span id="prof-would-take-again-val"></span>%</h2>
-                                    </button>
+                                <div id="prof-rmp-row-2" class="row px-5">
+                                        <button type="button" class="btn btn-outline-dark btn-lg col">
+                                            <h6 class="mb-1 text-muted text-center">WOULD TAKE AGAIN</h6>
+                                            <h4><span id="prof-would-take-again-val"></span>%</h4>
+                                        </button>
                                 </div>
 								<div id="grades-container" class="row">
 									<h5>Grade Distribution</h5>
 								</div>
-                                <div id="links-container" class="row">
+                                <div id="links-container" class="row my-3 d-flex gap-1">
                                     <button id="utd-grades-link" class="btn btn-outline-primary btn-sm">UTD Grades</button>
                                     <button id="rmp-link" class="btn btn-outline-primary btn-sm">Rate My Professor</button>
+                                    <button id="reddit-link" class="btn btn-outline-primary btn-sm">Reddit</button>
+                                    <button id="coursebook-link" class="btn btn-outline-primary btn-sm">UTD Coursebook</button>
                                 </div>
 							</div>
                         </div>

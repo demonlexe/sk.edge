@@ -188,42 +188,36 @@ export async function getProfessorGradeList(
     for (const professorName of professorList) {
         const professor = await getNebulaProfessor(professorName);
         const professorInfo = getSections(professor);
-        // console.log(professorInfo);
         if (!professorInfo) {
             professorCourseInfoList.push({
                 id: null,
                 professor: professorName,
                 professorId: getProfessorId(professor),
                 rmp: "_",
-                grades: null,
-                endDate: null,
+                grades: [],
                 numRatings: 0,
                 subjectPrefix,
                 courseNumber,
             });
             continue;
         }
-        // console.log("Professor sections: ",professorInfo);
         const intersection = intersect_arrays(courseInfo, professorInfo);
-        // console.log("Intersection: ", intersection);
-        let mostRecentEndDate = -1;
-        let mostRecentDist;
+        const gradeObjects = [];
         for (const elem of intersection) {
             const section = await getNebulaSection(elem);
-            const grades = getGradeDist(section);
-            const endDate = new Date(getEndDate(section));
-            if (endDate > mostRecentEndDate && grades.length > 1) {
-                mostRecentEndDate = endDate;
-                mostRecentDist = grades;
+            const gradeDistribution = getGradeDist(section);
+            if (gradeDistribution?.length > 0) {
+                gradeObjects.push({
+                    distribution: gradeDistribution,
+                    section: section.data["section_number"],
+                    academicSession: section.data["academic_session"].name,
+                });
             }
-            // console.log("Grades are ",grades," endDate is ",endDate);
         }
         professorCourseInfoList.push({
-            id: 0,
             professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
-            grades: mostRecentDist,
-            endDate: mostRecentEndDate,
+            grades: gradeObjects,
             subjectPrefix,
             courseNumber,
         });

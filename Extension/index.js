@@ -10,6 +10,3 @@ if (isComplete != null && isComplete == true) {
 else {
     window.location = './setupTab/setupTab.html';
 }
-
-
-

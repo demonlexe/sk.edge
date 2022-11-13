@@ -15,6 +15,8 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
         chrome.action.setPopup({
             popup: "index.html",
         });
+        chrome.action.setIcon({path: './assets/gray.png'});
+        chrome.action.setBadgeText({text: ""});
     }
 });
 
@@ -32,6 +34,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             chrome.action.setPopup({
                 popup: `./courseTab/courseTab.html?subjectPrefix=${subjectPrefix}&courseNumber=${courseNumber}&professors=${professors.join(",")}`,
             });
+            chrome.action.setIcon({path: './assets/hello_extensions.png'});
+            chrome.action.setBadgeText({text: "!"});
+            chrome.action.setBadgeBackgroundColor({color: 'green'});
             break;
         case messageType.SHOW_PROFESSOR_TAB:
             // TODO
