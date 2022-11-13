@@ -11,7 +11,7 @@ export function createGradeChart(ctx, grades) {
   }
 
   // print chart
-  const myChart = new Chart(ctx, {
+  return new Chart(ctx, {
     type: 'bar',
     data: {
       labels: adjustedLabels,

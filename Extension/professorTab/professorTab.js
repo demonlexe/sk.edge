@@ -5,9 +5,20 @@ const mockData = {
     professorId: "test",
     professor: "Jason Smith",
     rmp: 2.3,
-    rmpTags: ["Tough Grader", "Smart", "Helpful", "Engaging"],
-    grades: [5, 8, 4, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-    endDate: null,
+    rmpTags: ["TOUGH GRADER", "SMART", "HELPFUL", "ENGAGING"],
+    grades: [{
+        section: "007",
+        academicSession: "Spring 2021",
+        distribution: [5, 8, 4, 2, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+    }, {
+        section: "008",
+        academicSession: "Fall 2021",
+        distribution: [7, 5, 7, 2, 3, 1, 0, 2, 0, 0, 1, 0, 0],
+    }, {
+        section: "009",
+        academicSession: "Spring 2022",
+        distribution: [8, 6, 7, 4, 0, 3, 2, 0, 0, 0, 1, 1, 0],
+    }],
     difficulty: 3.5,
     wouldTakeAgainPercent: 67,
 	subjectPrefix: "CS",
@@ -27,6 +38,9 @@ $('#return-btn').on('click', async () => {
     const professors = await getLocalStorage("professors");
     window.location = `../courseTab/courseTab.html?subjectPrefix=${lastCourseFetched.subjectPrefix}&courseNumber=${lastCourseFetched.courseNumber}&professors=${professors}`;
 });
+
+let currentGraphIndex = 0;
+let currentChart = null;
 
 updateProfessorData(professorData);
 
@@ -92,7 +106,7 @@ function updateProfessorData(data) {
         });
     }
 
-    if (!data.grades || !data.grades.length) {
+    if (!data.grades || data.grades.length === 0) {
         $(`#grades-container`).append(
             `<div class="card-footer text-muted">
             No grade data available
@@ -105,7 +119,33 @@ function updateProfessorData(data) {
     $(`#grades-container`).append(
         `<canvas id="grades-canvas" class="w-100 h-100"></canvas>`
     );
+    
+    const gradeObject = data.grades[0];
     // get chart place
     const ctx = document.getElementById(`grades-canvas`).getContext("2d");
-    createGradeChart(ctx, data.grades);
+    currentChart = createGradeChart(ctx, gradeObject.distribution);
+    
+    $('#grades-container').append(` 
+        <div id="grades-arrows" class="d-flex justify-content-around">
+            <button id="btn-get-prev-chart" class="btn btn-secondary btn-sm inline-with-padding">&lt;</button>
+                <h5 id="grade-section">${data.subjectPrefix} ${data.courseNumber}.${gradeObject.section} (${gradeObject.academicSession})</h5>
+            <button id="btn-get-next-chart" class="btn btn-secondary btn-sm inline-with-padding">&gt;</button>
+        </div>`);
+
+    $('#btn-get-prev-chart').on('click', () => {
+        renderNextGradeChart(-1, data);
+    });
+
+    $('#btn-get-next-chart').on('click', () => {
+        renderNextGradeChart(1, data);
+    });
+}
+
+function renderNextGradeChart(delta, data) {
+    currentGraphIndex += delta;
+    const gradeObject = data.grades[Math.abs(currentGraphIndex % data.grades.length)];
+    currentChart?.destroy();
+    const ctx = document.getElementById(`grades-canvas`).getContext("2d");
+    currentChart = createGradeChart(ctx, gradeObject.distribution);
+    $('#grade-section').text(`${data.subjectPrefix} ${data.courseNumber}.${gradeObject.section} (${gradeObject.academicSession})`); 
 }
