@@ -93,9 +93,7 @@ function updateProfessorData(data) {
 
     // append RMP tags if they exist
     if (data.rmpTags?.length > 0) {
-        $(`#prof-rmp-row-2`).append(
-            `<div id="prof-tag-container" class="col d-flex flex-wrap justify-content-center align-items-center p-0 my-4"></div>`
-        );
+        $(`<div id="prof-tag-container" class="col d-flex flex-wrap justify-content-center align-items-center p-0 my-4"></div>`).insertAfter(`#prof-rmp-row-2`);
         data.rmpTags.forEach((tag) => {
             $("#prof-tag-container").append(`
         <button type="button" class="btn btn-light text-wrap" 
