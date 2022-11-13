@@ -1,34 +1,39 @@
-<html>
-    <script src="jquery-3.6.1.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Integra</title>
     <link rel="stylesheet" href="styles.css">
-    <body>
-        <div id="setup-page" class="mainPg">
-            <h2>Let's get you set up! :))))</h2>
-            <br></br>
-            <h4>GPA:</h4>
-            <input type="number" id="input-gpa"></input>
-            <h4>School:</h4>
-            <input type="text" id="input-school"></input>
-            <br></br>
-            <button id="send-button">Send</button>
-        </div>
-        <div id="dashboard-page" class="mainPg hiddenElement">
-            <button class="topRightBtn btn" id="settings-btn">⚙</button>
-            <h2>Welcome to INTEGRA!</h2>
-        </div>
-        <div id="settings-page" class="mainPg hiddenElement">
-            <button class="topRightBtn btn" id="back-btn">⮌</button>
-            <h2>SETTINGS</h2>
-            <h4>GPA:</h4>
-            <input type="number" id="settings-gpa"></input>
-            <h4>School:</h4>
-            <input type="text" id="settings-school"></input>
-            <br></br>
-            <button id="save-btn">Save</button>
-        </div>
-    </body>
+    <link href="bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="setup-page" class="mainPg">
+        <h2>Let's get you set up! :))))</h2>
+        <br></br>
+        <h4>GPA:</h4>
+        <input type="number" id="input-gpa"></input>
+        <h4>School:</h4>
+        <input type="text" id="input-school"></input>
+        <br></br>
+        <button id="send-button">Send</button>
+    </div>
+    <div id="dashboard-page" class="mainPg hiddenElement">
+        <button class="topRightBtn btn" id="settings-btn">⚙</button>
+        <h2>Welcome to INTEGRA!</h2>
+    </div>
+    <div id="settings-page" class="mainPg hiddenElement">
+        <button class="topRightBtn btn" id="back-btn">⮌</button>
+        <h2>SETTINGS</h2>
+        <h4>GPA:</h4>
+        <input type="number" id="settings-gpa"></input>
+        <h4>School:</h4>
+        <input type="text" id="settings-school"></input>
+        <br></br>
+        <button id="save-btn">Save</button>
+    </div>
     <script type="module" src="index.js"></script>
-
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="jquery-3.6.1.js"></script>
+  </body>
 </html>

@@ -33,3 +33,7 @@
     float: right;
     margin: 5px;
 }
+
+body {
+    min-width:500px;
+}
