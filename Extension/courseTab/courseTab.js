@@ -42,8 +42,8 @@ data.forEach((elem, idx) => {
                 <div class="col-4">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h6 class="card-subtitle mb-1 text-muted text-center">RMP Score</h6>
-                            <h1 class="card-title text-center" id="rmp">${elem.rmp} / 5</h5>
+                            <h6 class="card-subtitle mb-1 text-muted text-center">RMP SCORE</h6>
+                            <h2 class="card-title text-center" id="rmp">${elem.rmp} / 5</h2>
                         </div>
                     </div>
                 </div>
