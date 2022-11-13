@@ -1,17 +1,27 @@
-const data = [
-    {
-        professor: "John Cole",
-        rmp: 5,
-        grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-    },
-    {
-        professor: "Johnba Cole",
-        rmp: 3,
-        grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-    },
-];
+// const data = [
+//     {
+//         professor: "John Cole",
+//         rmp: 5,
+//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
+//     },
+//     {
+//         professor: "Johnba Cole",
+//         rmp: 3,
+//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
+//     },
+// ];
+import { getProfessorGradeList } from "../nebula.js";
 
 const grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F', 'W'];
+
+const params = new URLSearchParams(document.location.search);
+const subjectPrefix = params.get("subjectPrefix");
+const courseNumber = params.get("courseNumber");
+const professors = params.get("professors").split(",");
+console.log(subjectPrefix, courseNumber, professors);
+
+const data = await getProfessorGradeList(subjectPrefix, courseNumber, professors);
+console.log("got data:",data);
 
 data.forEach((elem, idx) => {
     // make a new professor card
@@ -30,15 +40,27 @@ data.forEach((elem, idx) => {
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <canvas id="grades-${idx}" class="w-100 h-100"></canvas>
+                <div id="grades-container-${idx}" class="col">
                 </div>
             </div>
         </div>`
     );
+
+    // if no grade data
+    if (!elem.grades || !elem.grades.length) {
+        $(`#grades-container-${idx}`).append(
+            `<div class="card-footer text-muted">
+                No grade data available
+            </div>`
+        );
+        return;
+    }
+
+    $(`#grades-container-${idx}`).append(
+        `<canvas id="grades-${idx}" class="w-100 h-100"></canvas>`
+    );
     // get chart place
     const ctx = document.getElementById(`grades-${idx}`).getContext('2d');
-
     // format data
     var adjustedLabels = []
     var adjustedGrades = []

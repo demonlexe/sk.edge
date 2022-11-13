@@ -26,8 +26,11 @@ function getNebulaProfessor(professorName) {
     };
     const getDataPromise = new Promise((resolve, reject) => {
         try {
+            const nameSplit = professorName.split(" ");
+            const firstName = nameSplit[0];
+            const lastName = nameSplit[nameSplit.length - 1];
             fetch(
-                `https://api.utdnebula.com/professor?last_name=${professorName}`,
+                `https://api.utdnebula.com/professor?first_name=${firstName}&last_name=${lastName}`,
                 {
                     method: "GET",
                     headers: headers,
@@ -36,7 +39,7 @@ function getNebulaProfessor(professorName) {
                 .then(function (res) {
                     resolve(res.json());
                 })
-                .then(function (err) {
+                .catch(function (err) {
                     console.log(err);
                     reject(null);
                 });
@@ -67,7 +70,7 @@ function getNebulaCourse(coursePrefix, courseNumber) {
                 .then(function (res) {
                     resolve(res.json());
                 })
-                .then(function (err) {
+                .catch(function (err) {
                     console.log(err);
                     reject(null);
                 });
@@ -95,7 +98,7 @@ function getNebulaSection(section_id) {
                 .then(function (res) {
                     resolve(res.json());
                 })
-                .then(function (err) {
+                .catch(function (err) {
                     console.log(err);
                     reject(null);
                 });
@@ -117,7 +120,7 @@ function getGradeDist(tableIn) {
     if (!tableIn || !tableIn.data) {
         return null;
     }
-    console.log(tableIn.data);
+    // console.log(tableIn.data);
     return tableIn.data["grade_distribution"];
 }
 
@@ -131,12 +134,12 @@ function getEndDate(tableIn) {
     ) {
         return -1;
     }
-    console.log(tableIn.data);
+    // console.log(tableIn.data);
     return tableIn.data["meetings"][0]["end_date"];
 }
 
 function getProfessorFullName(tableIn) {
-    console.log("getProfessorFullName:", tableIn.data[0]);
+    // console.log("getProfessorFullName:", tableIn.data[0]);
     if (
         !tableIn ||
         !tableIn.data ||
@@ -150,16 +153,26 @@ function getProfessorFullName(tableIn) {
 }
 
 
-async function getProfessorGradeList(subjectPrefix, courseNumber, professorList) {
+export async function getProfessorGradeList(subjectPrefix, courseNumber, professorList) {
 
 	const course = await getNebulaCourse(subjectPrefix, courseNumber);
 	const courseInfo = getSections(course);
 	// console.log("Course sections: ",courseInfo);
-	// console.log("Professor sections: ",professorInfo);
 	const professorCourseInfoList = [];
 	for (const professorName of professorList) {
 		const professor = await getNebulaProfessor(professorName);
 		const professorInfo = getSections(professor);
+        // console.log(professorInfo);
+        if (!professorInfo) {
+            professorCourseInfoList.push({
+                professor: professorName,
+                rmp: 5.0,
+                grades: null,
+                endDate: null,
+            })
+            continue;
+        }
+        // console.log("Professor sections: ",professorInfo);
 		const intersection = intersect_arrays(courseInfo, professorInfo);
 		// console.log("Intersection: ", intersection);
 		let mostRecentEndDate = -1;
@@ -174,10 +187,10 @@ async function getProfessorGradeList(subjectPrefix, courseNumber, professorList)
 			}
 			// console.log("Grades are ",grades," endDate is ",endDate);
 		}
-		professorCourseInfo.push({
+		professorCourseInfoList.push({
 			professor: getProfessorFullName(professor),
-			rmp: "5",
-			gradeDistribution: mostRecentDist,
+			rmp: 5.0,
+			grades: mostRecentDist,
 			endDate: mostRecentEndDate,
 		});
 	}

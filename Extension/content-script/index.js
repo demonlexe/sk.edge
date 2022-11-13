@@ -88,7 +88,7 @@ function getProfessorNames() {
 				// collapse section details
 				sectionDetailsButton.click();
 			});
-			resolve(professors);
+			resolve([... new Set(professors)]);
 		});
 	});
 };
