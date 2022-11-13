@@ -196,6 +196,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
 			// console.log("Grades are ",grades," endDate is ",endDate);
 		}
 		professorCourseInfoList.push({
+            id: 0,
 			professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
 			rmp: 5.0,
@@ -211,6 +212,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
             if (professorCourseInfoList[i].professor == data[j].name) {
                 professorCourseInfoList[i].rmp = data[j].rating;
                 professorCourseInfoList[i].numRatings = data[j].num_ratings;
+                professorCourseInfoList[i].id = data[j].rmp_id;
             }
         }
     }
