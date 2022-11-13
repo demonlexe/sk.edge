@@ -194,5 +194,45 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
 			endDate: mostRecentEndDate,
 		});
 	}
+
+    const data = await getRMPData(professorList);
+    for (let i = 0; i < professorCourseInfoList.length; i++) {
+        for (let j = 0; j < data.length; j++) {
+            if (professorCourseInfoList[i].professor == data[j].name) {
+                professorCourseInfoList[i].rmp = data[j].rating;
+            }
+        }
+    }
 	return professorCourseInfoList;
+}
+
+export async function getRMPData(professors) {
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+
+    const getDataPromise = new Promise((resolve, reject) => {
+        try {
+            fetch(`https://us-central1-hackutdix.cloudfunctions.net/get_professors`, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify({
+                    names: professors,
+                    school: "university of texas dallas" 
+                })
+            })
+                .then(function (res) {
+                    resolve(res.json());
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    reject(null);
+                });
+        } catch (err) {
+            console.log("Error getting data: " + err);
+            reject(null);
+        }
+    });
+
+    return getDataPromise;
 }
