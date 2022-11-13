@@ -64,6 +64,10 @@ function updateProfessorData(data) {
         window.open(`https://www.reddit.com/search/?q=${gradesQuery}`,'_blank');
     });
 
+    $('#coursebook-link').on('click', funct => {
+        window.open(`https://coursebook.utdallas.edu/`, '_blank');
+    });
+
     if (data.rmp < 2) {
         $("#prof-rating-val").css("color", "red");
     } else if (data.rmp < 4) {
