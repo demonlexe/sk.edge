@@ -9,11 +9,23 @@ async function setupClicked() {
         await setData('student_school',school);
         await setData('user_setup_complete',true);
     } else {
+        let missingGpa = false;
+        let missingSchool = false;
         if (!gpa || gpa.length < 1) {
-            $("#input-gpa").addClass("highlightedElement");
+            missingGpa = true;
         }
         if (!school || school.length < 3) {
-            $("#input-school").addClass("highlightedElement");
+            missingSchool = true;
+        }
+        $("#setup-missing-alert").remove();
+        if (missingGpa || missingSchool) {
+            let missingStr = (missingGpa && missingSchool) ? "Please input your GPA and School!" : ((missingGpa) ? "Please input your GPA!" : "Please input your School!");
+            $("#setup-card").append(`
+            <div id="setup-missing-alert" class="alert alert-warning alert-dismissible fade show" role="alert">
+            ${missingStr}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            `);
         }
     }   
 }
