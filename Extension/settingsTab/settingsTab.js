@@ -1,5 +1,8 @@
 import { getData, setData } from "../chrome_store.js";
 
+let backBtn = $("#back-btn");
+let saveBtn = $("#save-btn");
+
 async function saveSettingsClicked() {
     let gpa = $("#settings-gpa").val();
     let school = $("#settings-school").val();
@@ -14,6 +17,14 @@ async function saveSettingsClicked() {
             $("#input-school").addClass("highlightedElement");
         }
     } 
+    $("#save-successful").remove();
+    $("#settings-card").append(
+        `<div id="save-successful" class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Settings saved!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`
+    );
+    
 }
 
 function settingsBackBtnClick(backBtn, goTo) {
@@ -22,8 +33,6 @@ function settingsBackBtnClick(backBtn, goTo) {
     window.location = goTo;
 }
 
-let backBtn = $("#back-btn");
-let saveBtn = $("#save-btn");
 
 backBtn.on("click", funct => {settingsBackBtnClick(backBtn, "../dashboardTab/dashboardTab.html")});
 saveBtn.on("click", saveSettingsClicked);
