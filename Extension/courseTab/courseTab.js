@@ -12,6 +12,7 @@ function getData() {
     return new Promise(async (resolve) => {
         // check if course has been cached 
         const lastCourseFetched = await getLocalStorage("last_course_fetched");
+        await setLocalStorage("professors", professors);
         if (subjectPrefix == lastCourseFetched.subjectPrefix && courseNumber == lastCourseFetched.courseNumber) {
             console.log("Using cached professor data");
             const data = await getLocalStorage("professor_data");
@@ -26,8 +27,9 @@ function getData() {
             });
 
             const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
-            setLocalStorage("professor_data", data);
-            setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+            await setLocalStorage("professor_data", data);
+            await setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+            await setLocalStorage("professors", professors);
             resolve(data);
         }
     });
