@@ -1,5 +1,6 @@
 import { getData } from "../chrome_store.js";
 import { createGradeChart } from "../common/gradeChart.js";
+import { getLocalStorage } from "../localStorage.js";
 
 const mockData = {
     professorId: "test",
@@ -16,7 +17,7 @@ const mockData = {
 
 const params = new URLSearchParams(document.location.search);
 const professorId = params.get("professorId");
-const data = await getData("professor_data");
+const data = await getLocalStorage("professor_data");
 
 // get data with professorId
 const professorData = data.filter((elem) => elem.professorId == professorId)[0];
