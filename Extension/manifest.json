@@ -5,7 +5,7 @@
     "version": "1.0",
     "action": {
       "default_popup": "main.html",
-      "default_icon": "hello_extensions.png"
+      "default_icon": "./assets/hello_extensions.png"
     },
     "content_scripts": [
     {
