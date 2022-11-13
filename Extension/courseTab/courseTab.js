@@ -1,16 +1,4 @@
-// const data = [
-//     {
-//         professor: "John Cole",
-//         rmp: 5,
-//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-//     },
-//     {
-//         professor: "Johnba Cole",
-//         rmp: 3,
-//         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
-//     },
-// ];
-import { setData } from "../chrome_store.js";
+import { getLocalStorage, setLocalStorage } from "../localStorage.js";
 import { createGradeChart } from "../common/gradeChart.js";
 import { getProfessorGradeList } from "../nebula.js";
 
@@ -20,19 +8,39 @@ const courseNumber = params.get("courseNumber");
 const professors = params.get("professors").split(",");
 console.log(subjectPrefix, courseNumber, professors);
 
-const parsedProfessors = []
-professors.forEach(elem => {
-    const arr = elem.split(' ');
-    parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
-});
+function getData() {
+    return new Promise(async (resolve) => {
+        // check if course has been cached 
+        const lastCourseFetched = await getLocalStorage("last_course_fetched");
+        await setLocalStorage("professors", professors);
+        if (subjectPrefix == lastCourseFetched.subjectPrefix && courseNumber == lastCourseFetched.courseNumber) {
+            console.log("Using cached professor data");
+            const data = await getLocalStorage("professor_data");
+            resolve(data);
+        }
+        else {
+            console.log("Fetching professor data");
+            const parsedProfessors = []
+            professors.forEach(elem => {
+                const arr = elem.split(' ');
+                parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
+            });
 
-const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
-console.log("got data:",data);
-setData('professor_data', data);
+            const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
+            await setLocalStorage("professor_data", data);
+            await setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+            await setLocalStorage("professors", professors);
+            resolve(data);
+        }
+    });
+}
+
+const data = await getData();
 
 //Detach the spinner when the data has been obtained.
 let mySpinner = $("#spinner-div").detach();
 // $(`#prof-table`).append(`<div class="p-2 bg-light border" id="course">${subjectPrefix + courseNumber}</div>`);
+
 
 data.forEach((elem, idx) => {
 

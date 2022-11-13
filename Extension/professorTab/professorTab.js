@@ -1,5 +1,5 @@
-import { getData } from "../chrome_store.js";
 import { createGradeChart } from "../common/gradeChart.js";
+import { getLocalStorage } from "../localStorage.js";
 
 const mockData = {
     professorId: "test",
@@ -16,17 +16,17 @@ const mockData = {
 
 const params = new URLSearchParams(document.location.search);
 const professorId = params.get("professorId");
-const data = await getData("professor_data");
+const data = await getLocalStorage("professor_data");
 
 // get data with professorId
 const professorData = data.filter((elem) => elem.professorId == professorId)[0];
 console.log(professorData);
 
-
-// keeping if we want to add later
-// $('#return-btn').on('click', () => {
-//   window.location = "../courseTab/courseTab.html";
-// });
+$('#return-btn').on('click', async () => {
+    const lastCourseFetched = await getLocalStorage("last_course_fetched");
+    const professors = await getLocalStorage("professors");
+    window.location = `../courseTab/courseTab.html?subjectPrefix=${lastCourseFetched.subjectPrefix}&courseNumber=${lastCourseFetched.courseNumber}&professors=${professors}`;
+});
 
 updateProfessorData(professorData);
 
