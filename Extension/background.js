@@ -8,6 +8,12 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
 			files: ["./content-script/index.js"]
 		});
 	}
+	else {
+		// reset the extension popup
+		chrome.action.setPopup({
+			popup: "index.html",
+		})
+	}
 });
 
 const messageType = {
@@ -21,7 +27,10 @@ chrome.runtime.onMessage.addListener(
     console.log(request);
     switch (request.type) {
         case messageType.SHOW_COURSE_TAB:
-            const { coursePrefix, courseNumber, professors } = request.payload;
+            const { subjectPrefix, courseNumber, professors } = request.payload;
+			chrome.action.setPopup({
+				popup: `./courseTab/courseTab.html?subjectPrefix=${subjectPrefix}&courseNumber=${courseNumber}&professors=${professors.join(",")}`,
+			});
             break;
         case messageType.SHOW_PROFESSOR_TAB:
             // TODO
