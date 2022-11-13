@@ -10,6 +10,7 @@
 //         grades: [0, 22, 5, 3, 9, 4, 2, 5, 2, 1, 0, 2, 5, 0]
 //     },
 // ];
+import { setData } from "../chrome_store.js";
 import { getProfessorGradeList } from "../nebula.js";
 
 const grades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F', 'W'];
@@ -22,20 +23,26 @@ console.log(subjectPrefix, courseNumber, professors);
 
 const data = await getProfessorGradeList(subjectPrefix, courseNumber, professors);
 console.log("got data:",data);
+setData('professor_data', data);
+
+//Detach the spinner when the data has been obtained.
+let mySpinner = $("#spinner-div").detach();
 
 data.forEach((elem, idx) => {
+
     // make a new professor card
     $("#prof-table").append(
         `<div class="card" id="prof-${idx}">
-            <div class="card-header">
-                ${elem.professor}
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><b>${elem.professor}</b></span>
+                <button id="prof-details-button-${idx}"class="btn btn-light" type="button">See detailed info</button>
             </div>
             <div class="card-body">
             <div class="row">
                 <div class="col-4">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h6 class="card-subtitle mb-1 text-muted text-center">RMP</h6>
+                            <h6 class="card-subtitle mb-1 text-muted text-center">RMP Score</h6>
                             <h1 class="card-title text-center" id="rmp">${elem.rmp} / 5</h5>
                         </div>
                     </div>
@@ -45,6 +52,11 @@ data.forEach((elem, idx) => {
             </div>
         </div>`
     );
+
+    $(`#prof-details-button-${idx}`).on("click", () => {
+        console.log("clicked");
+        window.location = "../professorTab/professorTab.html?professorId=" + elem.professorId;
+    });
 
     // if no grade data
     if (!elem.grades || !elem.grades.length) {

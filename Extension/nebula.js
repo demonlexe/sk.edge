@@ -152,6 +152,13 @@ function getProfessorFullName(tableIn) {
     return tableIn.data[0]["first_name"] + " " + tableIn.data[0]["last_name"];
 }
 
+function getProfessorId(tableIn) {
+    if (!tableIn || !tableIn.data || !tableIn.data[0] || !tableIn.data[0]["id"]) {
+        return null;
+    }
+    return tableIn.data[0]["id"];
+}
+
 
 export async function getProfessorGradeList(subjectPrefix, courseNumber, professorList) {
 
@@ -166,6 +173,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
         if (!professorInfo) {
             professorCourseInfoList.push({
                 professor: professorName,
+                professorId: getProfessorId(professor),
                 rmp: 5.0,
                 grades: null,
                 endDate: null,
@@ -189,6 +197,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
 		}
 		professorCourseInfoList.push({
 			professor: getProfessorFullName(professor),
+            professorId: getProfessorId(professor),
 			rmp: 5.0,
 			grades: mostRecentDist,
 			endDate: mostRecentEndDate,
