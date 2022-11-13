@@ -32,6 +32,7 @@ setData('professor_data', data);
 
 //Detach the spinner when the data has been obtained.
 let mySpinner = $("#spinner-div").detach();
+// $(`#prof-table`).append(`<div class="p-2 bg-light border" id="course">${subjectPrefix + courseNumber}</div>`);
 
 data.forEach((elem, idx) => {
 
