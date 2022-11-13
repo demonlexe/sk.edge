@@ -134,9 +134,9 @@ function updateProfessorData(data) {
     
     $('#grades-container').append(` 
         <div id="grades-arrows" class="d-flex justify-content-around">
-            <button id="btn-get-prev-chart" class="btn btn-secondary btn-sm inline-with-padding">&lt;</button>
-                <h5 id="grade-section">${data.subjectPrefix} ${data.courseNumber}.${gradeObject.section} (${gradeObject.academicSession})</h5>
-            <button id="btn-get-next-chart" class="btn btn-secondary btn-sm inline-with-padding">&gt;</button>
+            <button id="btn-get-prev-chart" class="btn btn btn-outline-dark btn-sm inline-with-padding">&lt;</button>
+            <h5 id="grade-section" class="text-muted">${data.subjectPrefix} ${data.courseNumber}.${gradeObject.section} (${gradeObject.academicSession})</h5>
+            <button id="btn-get-next-chart" class="btn btn btn-outline-dark btn-sm inline-with-padding">&gt;</button>
         </div>`);
 
     $('#btn-get-prev-chart').on('click', () => {
