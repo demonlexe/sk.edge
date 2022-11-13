@@ -39,6 +39,12 @@ function updateProfessorData(data) {
 	$("#utd-grades-link").on('click', funct => {
 		window.open(`https://utdgrades.com/results?search=${gradesQuery}`,'_blank');
 	});
+    $("#rmp-link").on('click', funct => {
+        if (data.id)
+        {
+            window.open(`https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${data.id}`,'_blank');
+        }
+    });
 
     if (data.rmp < 2) {
         $("#prof-rating-val").css("color", "red");
