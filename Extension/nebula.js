@@ -201,6 +201,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
 			rmp: 5.0,
 			grades: mostRecentDist,
 			endDate: mostRecentEndDate,
+            numRatings: 0
 		});
 	}
 
@@ -209,6 +210,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
         for (let j = 0; j < data.length; j++) {
             if (professorCourseInfoList[i].professor == data[j].name) {
                 professorCourseInfoList[i].rmp = data[j].rating;
+                professorCourseInfoList[i].numRatings = data[j].num_ratings;
             }
         }
     }
