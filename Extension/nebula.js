@@ -1,3 +1,15 @@
+const allRmpTags = [
+    "BEWARE OF POP QUIZZES",
+    "CARING",
+    "ACCESSIBLE OUTSIDE CLASS",
+    "GET READY TO READ",
+    "TOUGH  GRADER",
+    "INSPIRATIONAL",
+    "PARTICIPATION MATTERS",
+    "LECTURE HEAVY",
+    "GROUP PROJECTS",
+];
+
 function intersect_arrays(a, b) {
     var sorted_a = a.concat().sort();
     var sorted_b = b.concat().sort();
@@ -153,22 +165,29 @@ function getProfessorFullName(tableIn) {
 }
 
 function getProfessorId(tableIn) {
-    if (!tableIn || !tableIn.data || !tableIn.data[0] || !tableIn.data[0]["id"]) {
-        return null;
+    if (tableIn?.data?.[0]?.["_id"]) {
+        return tableIn.data[0]["_id"];
     }
-    return tableIn.data[0]["id"];
+    return null;
 }
 
+function getRandomRpmTags() {
+    const shuffled = [...allRmpTags].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 4);
+}
 
-export async function getProfessorGradeList(subjectPrefix, courseNumber, professorList) {
-
-	const course = await getNebulaCourse(subjectPrefix, courseNumber);
-	const courseInfo = getSections(course);
-	// console.log("Course sections: ",courseInfo);
-	const professorCourseInfoList = [];
-	for (const professorName of professorList) {
-		const professor = await getNebulaProfessor(professorName);
-		const professorInfo = getSections(professor);
+export async function getProfessorGradeList(
+    subjectPrefix,
+    courseNumber,
+    professorList
+) {
+    const course = await getNebulaCourse(subjectPrefix, courseNumber);
+    const courseInfo = getSections(course);
+    // console.log("Course sections: ",courseInfo);
+    const professorCourseInfoList = [];
+    for (const professorName of professorList) {
+        const professor = await getNebulaProfessor(professorName);
+        const professorInfo = getSections(professor);
         // console.log(professorInfo);
         if (!professorInfo) {
             professorCourseInfoList.push({
@@ -177,64 +196,71 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
                 rmp: 5.0,
                 grades: null,
                 endDate: null,
-            })
+            });
             continue;
         }
         // console.log("Professor sections: ",professorInfo);
-		const intersection = intersect_arrays(courseInfo, professorInfo);
-		// console.log("Intersection: ", intersection);
-		let mostRecentEndDate = -1;
-		let mostRecentDist;
-		for (const elem of intersection) {
-			const section = await getNebulaSection(elem);
-			const grades = getGradeDist(section);
-			const endDate = new Date(getEndDate(section));
-			if (endDate > mostRecentEndDate && grades.length > 1) {
-				mostRecentEndDate = endDate;
-				mostRecentDist = grades;
-			}
-			// console.log("Grades are ",grades," endDate is ",endDate);
-		}
-		professorCourseInfoList.push({
+        const intersection = intersect_arrays(courseInfo, professorInfo);
+        // console.log("Intersection: ", intersection);
+        let mostRecentEndDate = -1;
+        let mostRecentDist;
+        for (const elem of intersection) {
+            const section = await getNebulaSection(elem);
+            const grades = getGradeDist(section);
+            const endDate = new Date(getEndDate(section));
+            if (endDate > mostRecentEndDate && grades.length > 1) {
+                mostRecentEndDate = endDate;
+                mostRecentDist = grades;
+            }
+            // console.log("Grades are ",grades," endDate is ",endDate);
+        }
+        professorCourseInfoList.push({
             id: 0,
-			professor: getProfessorFullName(professor),
+            professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
-			rmp: 5.0,
-			grades: mostRecentDist,
-			endDate: mostRecentEndDate,
-            numRatings: 0
-		});
-	}
+            rmp: 5.0,
+            grades: mostRecentDist,
+            endDate: mostRecentEndDate,
+            numRatings: 0,
+        });
+    }
 
     const data = await getRMPData(professorList);
     for (let i = 0; i < professorCourseInfoList.length; i++) {
         for (let j = 0; j < data.length; j++) {
-            const noMiddleName = data[j].name.split(' ')[0] + " " + data[j].name.split(' ')[data[j].name.split(' ').length - 1];
+            const noMiddleName =
+                data[j].name.split(" ")[0] +
+                " " +
+                data[j].name.split(" ")[data[j].name.split(" ").length - 1];
             if (professorCourseInfoList[i].professor == noMiddleName) {
                 professorCourseInfoList[i].rmp = data[j].rating;
                 professorCourseInfoList[i].numRatings = data[j].num_ratings;
                 professorCourseInfoList[i].id = data[j].rmp_id;
+                professorCourseInfoList[i].rmpTags = getRandomRpmTags();
             }
         }
     }
-	return professorCourseInfoList;
+    return professorCourseInfoList;
 }
 
 export async function getRMPData(professors) {
     const headers = {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
     };
 
     const getDataPromise = new Promise((resolve, reject) => {
         try {
-            fetch(`https://us-central1-hackutdix.cloudfunctions.net/get_professors`, {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify({
-                    names: professors,
-                    school: "university of texas dallas" 
-                })
-            })
+            fetch(
+                `https://us-central1-hackutdix.cloudfunctions.net/get_professors`,
+                {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify({
+                        names: professors,
+                        school: "university of texas dallas",
+                    }),
+                }
+            )
                 .then(function (res) {
                     resolve(res.json());
                 })
