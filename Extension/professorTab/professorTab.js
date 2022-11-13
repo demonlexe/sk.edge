@@ -51,12 +51,17 @@ function updateProfessorData(data) {
 	const gradesQuery = `${data.professor.replace(" ", "+")}+${data.subjectPrefix}+${data.courseNumber}`;
 	$("#utd-grades-link").on('click', funct => {
 		window.open(`https://utdgrades.com/results?search=${gradesQuery}`,'_blank');
-	});
+    });
+    
     $("#rmp-link").on('click', funct => {
         if (data.id)
         {
             window.open(`https://www.ratemyprofessors.com/ShowRatings.jsp?tid=${data.id}`,'_blank');
         }
+    });
+
+    $('#reddit-link').on('click', funct => {
+        window.open(`https://www.reddit.com/search/?q=${gradesQuery}`,'_blank');
     });
 
     if (data.rmp < 2) {
