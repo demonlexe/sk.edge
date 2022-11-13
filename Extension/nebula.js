@@ -196,6 +196,7 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
 			// console.log("Grades are ",grades," endDate is ",endDate);
 		}
 		professorCourseInfoList.push({
+            id: 0,
 			professor: getProfessorFullName(professor),
             professorId: getProfessorId(professor),
 			rmp: 5.0,
@@ -208,9 +209,11 @@ export async function getProfessorGradeList(subjectPrefix, courseNumber, profess
     const data = await getRMPData(professorList);
     for (let i = 0; i < professorCourseInfoList.length; i++) {
         for (let j = 0; j < data.length; j++) {
-            if (professorCourseInfoList[i].professor == data[j].name) {
+            const noMiddleName = data[j].name.split(' ')[0] + " " + data[j].name.split(' ')[data[j].name.split(' ').length - 1];
+            if (professorCourseInfoList[i].professor == noMiddleName) {
                 professorCourseInfoList[i].rmp = data[j].rating;
                 professorCourseInfoList[i].numRatings = data[j].num_ratings;
+                professorCourseInfoList[i].id = data[j].rmp_id;
             }
         }
     }
