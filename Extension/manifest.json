@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Integra-Academia",
-    "description": "An integrated tool for class registration.",
+    "name": "sk.edge",
+    "description": "the all-in-one registration tool by students, for students",
     "version": "1.0",
     "action": {
       "default_popup": "index.html",
