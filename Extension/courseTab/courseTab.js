@@ -46,7 +46,7 @@ data.forEach((elem, idx) => {
             <div class="row">
                 <div class="col-4">
                 
-                    <div class="card h-100" id="rmp-${idx}" style="cursor: pointer;">
+                    <div class="card h-100 btn btn-light" id="rmp-${idx}" style="cursor: pointer;">
                         <div class="card-body">
                             <h6 class="card-subtitle mb-1 text-muted text-center">RMP SCORE</h6>
                             <h2 class="card-title text-center">${elem.rmp} / 5</h2>
