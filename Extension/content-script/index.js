@@ -6,11 +6,11 @@ var messageType = {
 }
 
 // send event to to extension to show the course info tab
-function sendCourseDataToExtension(coursePrefix, courseNumber, professors) {
+function sendCourseDataToExtension(subjectPrefix, courseNumber, professors) {
 	chrome.runtime.sendMessage({
 		type: messageType.SHOW_COURSE_TAB,
 		payload: {
-			coursePrefix,
+			subjectPrefix,
 			courseNumber,
 			professors,
 		}
@@ -41,9 +41,9 @@ function getCourseData() {
 	return new Promise(resolve => {
 		waitForElement('h1').then((course) => {
 			const courseData = course.innerText.split(" ");
-			coursePrefix = courseData[0];
+			subjectPrefix = courseData[0];
 			courseNumber = courseData[1];
-			resolve({ coursePrefix, courseNumber });
+			resolve({ subjectPrefix, courseNumber });
 		});
 	});
 };
@@ -94,6 +94,6 @@ function getProfessorNames() {
 };
 
 Promise.all([getCourseData(), getProfessorNames()]).then(([courseData, professors]) => {
-	console.log(courseData.coursePrefix, courseData.courseNumber, professors);
-	sendCourseDataToExtension(courseData.coursePrefix, courseData.courseNumber, professors);
+	console.log(courseData.subjectPrefix, courseData.courseNumber, professors);
+	sendCourseDataToExtension(courseData.subjectPrefix, courseData.courseNumber, professors);
 });
