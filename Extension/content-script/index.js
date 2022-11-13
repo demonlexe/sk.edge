@@ -1,6 +1,6 @@
 console.log("Content script loaded");
 
-const messageType = {
+var messageType = {
 	SHOW_COURSE_TAB: 'SHOW_COURSE_TAB',
 	SHOW_PROFESSOR_TAB: 'SHOW_PROFESSOR_TAB',
 }
@@ -53,6 +53,13 @@ function getProfessorNames() {
 		waitForElement('table').then((courseTable) => {
 			const professors = [];
 			const courseRows = courseTable.querySelectorAll('tbody');
+
+			// add Professor header to the table
+			const tableHeaders = courseTable.querySelector('thead > tr');
+			const newHeader = document.createElement('th');
+			newHeader.innerText = 'Professor';
+			tableHeaders.insertBefore(newHeader, tableHeaders.children[7]);
+
 			courseRows.forEach((courseRow) => {
 				// get professor name from course row
 				const sectionDetailsButton = courseRow.querySelector('tr > td > button');
@@ -60,13 +67,24 @@ function getProfessorNames() {
 				sectionDetailsButton.click();
 				const sectionDetails = courseRow.querySelector('tr:nth-child(2)');
 				const sectionDetailsList = sectionDetails.querySelectorAll('li');
+				let professor = '';
 				sectionDetailsList.forEach(li => {
 					const detailLabelText = li.querySelector('strong > span').innerText;
 					if (detailLabelText.includes('Instructor')) {
-						const professor = li.innerText.split(":")[1].trim();
+						professor = li.innerText.split(":")[1].trim();
 						professors.push(professor);
 					}
-				})
+				});
+				// append professor name to the table
+				const newTd = document.createElement('td');
+				newTd.innerText = professor;
+				// append span element with professor as text to the newTd
+				// const newSpan = document.createElement('span');
+				// newSpan.innerText = professor;
+				// newTd.appendChild(newSpan);
+				const courseRowCells = courseRow.querySelector('tr');
+				courseRowCells.insertBefore(newTd, courseRowCells.children[7]);
+
 				// collapse section details
 				sectionDetailsButton.click();
 			});
@@ -74,7 +92,6 @@ function getProfessorNames() {
 		});
 	});
 };
-
 
 Promise.all([getCourseData(), getProfessorNames()]).then(([courseData, professors]) => {
 	console.log(courseData.coursePrefix, courseData.courseNumber, professors);
