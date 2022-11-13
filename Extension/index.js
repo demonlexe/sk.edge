@@ -7,14 +7,13 @@ const messageType = {
 // listen for messages from the content script
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
+    console.log(request);
     switch (request.type) {
         case messageType.SHOW_COURSE_TAB:
-            console.log("SHOW_COURSE_TAB");
-            const { coursePrefix, courseNumber } = request.payload;
-            console.log(coursePrefix, courseNumber);
+            const { coursePrefix, courseNumber, professors } = request.payload;
             break;
         case messageType.SHOW_PROFESSOR_TAB:
-            console.log("SHOW_PROFESSOR_TAB");
+            // TODO
             break;
         default:
             console.log("Unknown message type");
