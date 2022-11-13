@@ -4,7 +4,7 @@
     "description": "An integrated tool for class registration.",
     "version": "1.0",
     "action": {
-      "default_popup": "main.html",
+      "default_popup": "index.html",
       "default_icon": "./assets/hello_extensions.png"
     },
     "content_scripts": [
