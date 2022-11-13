@@ -23,6 +23,9 @@ console.log(subjectPrefix, courseNumber, professors);
 const data = await getProfessorGradeList(subjectPrefix, courseNumber, professors);
 console.log("got data:",data);
 
+//Detach the spinner when the data has been obtained.
+let mySpinner = $("#spinner-div").detach();
+
 data.forEach((elem, idx) => {
     // make a new professor card
     $("#prof-table").append(
