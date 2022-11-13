@@ -21,7 +21,13 @@ const courseNumber = params.get("courseNumber");
 const professors = params.get("professors").split(",");
 console.log(subjectPrefix, courseNumber, professors);
 
-const data = await getProfessorGradeList(subjectPrefix, courseNumber, professors);
+const parsedProfessors = []
+professors.forEach(elem => {
+    const arr = elem.split(' ');
+    parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
+});
+
+const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
 console.log("got data:",data);
 setData('professor_data', data);
 
