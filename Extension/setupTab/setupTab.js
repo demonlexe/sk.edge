@@ -27,7 +27,7 @@ async function setupClicked() {
     let gpa = $("#input-gpa").val();
     let school = $("#input-school").val();
     if (gpa && school && gpa.length >= 1 && school.length >= 3) {
-        window.location="./dashboardTab/dashboardTab.html";
+        window.location="../dashboardTab/dashboardTab.html";
         await setData('student_gpa',gpa);
         await setData('student_school',school);
         await setData('user_setup_complete',true);
@@ -51,7 +51,7 @@ const isComplete = await getData('user_setup_complete');
 console.log("The value of isComplete is " + isComplete);
 if (isComplete != null && isComplete == true) {
     // Then user has already completed setup and we have their data.
-    window.location = "./dashboardTab/dashboardTab.html";
+    window.location = "../dashboardTab/dashboardTab.html";
 }
 let sendBtn = $("#send-button");
 
