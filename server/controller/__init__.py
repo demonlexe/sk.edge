@@ -1,4 +1,5 @@
 from fix_ratemyprofessor import get_professor_by_school_and_name, get_school_by_name, Professor
+from flask import jsonify
 
 def get_professor_ctrl(school_name: str, prof_name: str):
     school = get_school_by_name(school_name)
@@ -26,4 +27,4 @@ def get_professors_ctrl(school_name: str, prof_names):
         if prof is None:
             print("Prof", x, "not found!")
         prof_list.append(prof.__serialize__())
-    return prof_list
+    return jsonify(prof_list)
