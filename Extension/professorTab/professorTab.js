@@ -70,9 +70,9 @@ function updateProfessorData(data) {
 
     if (data.rmp < 2) {
         $("#prof-rating-val").css("color", "red");
-    } else if (data.rmp < 4) {
-        $("#prof-rating-val").css("color", "orange");
     } else if (data.rmp < 3) {
+        $("#prof-rating-val").css("color", "orange");
+    } else if (data.rmp < 4) {
         $("#prof-rating-val").css("color", "green");
     } else {
         $("#prof-rating-val").css("color", "lime");

@@ -71,9 +71,9 @@ data.forEach((elem, idx) => {
     $(`#rmp-score-${idx}`).text(elem.rmp ?? "N/A");
     if (elem.rmp < 2) {
         $(`#rmp-score-${idx}`).css("color", "red");
-    } else if (elem.rmp < 4) {
-        $(`#rmp-score-${idx}`).css("color", "orange");
     } else if (elem.rmp < 3) {
+        $(`#rmp-score-${idx}`).css("color", "orange");
+    } else if (elem.rmp < 4) {
         $(`#rmp-score-${idx}`).css("color", "green");
     } else {
         $(`#rmp-score-${idx}`).css("color", "lime");
