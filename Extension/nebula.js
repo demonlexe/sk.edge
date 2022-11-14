@@ -31,9 +31,11 @@ function intersect_arrays(a, b) {
     return common;
 }
 
+const APIKEY = window.localStorage.getItem("apiKey");
+
 function getNebulaProfessor(professorName) {
     const headers = {
-        "x-api-key": "AIzaSyDswjXmm_HXXcjr2yPTmVC_0b9BhQsN8lk",
+        "x-api-key": APIKEY,
         Accept: "application/json",
     };
     const getDataPromise = new Promise((resolve, reject) => {
@@ -66,7 +68,7 @@ function getNebulaProfessor(professorName) {
 
 function getNebulaCourse(coursePrefix, courseNumber) {
     const headers = {
-        "x-api-key": "AIzaSyDswjXmm_HXXcjr2yPTmVC_0b9BhQsN8lk",
+        "x-api-key": APIKEY,
         Accept: "application/json",
     };
 
@@ -97,7 +99,7 @@ function getNebulaCourse(coursePrefix, courseNumber) {
 
 function getNebulaSection(section_id) {
     const headers = {
-        "x-api-key": "AIzaSyDswjXmm_HXXcjr2yPTmVC_0b9BhQsN8lk",
+        "x-api-key": APIKEY,
         Accept: "application/json",
     };
 
