@@ -50,6 +50,37 @@ export function setNebulaAPIKey(key)
     NEBULA_API_KEY = key;
 }
 
+export function testNebulaAPIKey(key) {
+    const headers = {
+        "x-api-key": key,
+        Accept: "application/json",
+    };
+
+    const getDataPromise = new Promise((resolve) => {
+        try {
+            fetch(
+                `https://api.utdnebula.com/course?course_number=2418&subject_prefix=MATH`,
+                {
+                    method: "GET",
+                    headers: headers,
+                }
+            )
+                .then(function (res) {
+                    resolve(true);
+                })
+                .catch(function (err) {
+                    console.log("Nebula error is: ",err);
+                    resolve(false);
+                });
+        } catch (err) {
+            console.log("Error getting data: " + err);
+            resolve(false);
+        }
+    });
+
+    return getDataPromise;
+}
+
 function getNebulaProfessor(professorName) {
     const headers = {
         "x-api-key": NEBULA_API_KEY,
