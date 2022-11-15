@@ -1,4 +1,4 @@
-console.log("Content script loaded");
+console.log("index.js script loaded");
 
 var messageType = {
 	SHOW_COURSE_TAB: 'SHOW_COURSE_TAB',
@@ -93,7 +93,15 @@ function getProfessorNames() {
 	});
 };
 
-Promise.all([getCourseData(), getProfessorNames()]).then(([courseData, professors]) => {
-	console.log(courseData.subjectPrefix, courseData.courseNumber, professors);
-	sendCourseDataToExtension(courseData.subjectPrefix, courseData.courseNumber, professors);
+// Ensure user has already completed setup, which implies we have an API key.
+chrome.storage.sync.get('user_setup_complete', (result) => {
+	let isComplete = result['user_setup_complete'];
+	if (isComplete != null && isComplete == true) {
+		// console.log("User setup confirmed to be complete.");
+		Promise.all([getCourseData(), getProfessorNames()]).then(([courseData, professors]) => {
+			console.log(courseData.subjectPrefix, courseData.courseNumber, professors);
+			sendCourseDataToExtension(courseData.subjectPrefix, courseData.courseNumber, professors);
+		});
+		
+	}
 });
