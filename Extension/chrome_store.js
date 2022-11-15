@@ -15,7 +15,7 @@ function getData(key) {
     const getDataPromise = new Promise((resolve, reject) => {
         try {
             chrome.storage.sync.get(key, (result) => {
-                console.log("Fetching data: returning ",result[key]);
+                // console.log("Fetching data: returning ",result[key]);
                 let res = result[key];
                 resolve(res);
             });
@@ -39,7 +39,7 @@ function setData(key, value) {
     const setDataPromise = new Promise((resolve, reject) => {
         try {
             chrome.storage.sync.set({[key]: value}, function() {
-                console.log(key,' is set succesfully to ',value);
+                // console.log(key,' is set succesfully to ',value);
                 resolve(true);
             });
         }

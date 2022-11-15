@@ -8,5 +8,6 @@ let settingsBtn = $("#settings-btn");
 settingsBtn.on("click", settingsClicked);
 let exitBtn = $("#exit-dash-btn");
 exitBtn.on("click", () => { 
+    window.open("https://www.utdallas.edu/galaxy/","_blank")
     window.close();
 });
