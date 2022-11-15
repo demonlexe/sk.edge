@@ -102,12 +102,12 @@ function getNebulaCourse(coursePrefix, courseNumber) {
                     resolve(res.json());
                 })
                 .catch(function (err) {
-                    console.log(err);
-                    reject(null);
+                    console.log("Nebula error is: ",err);
+                    reject(err);
                 });
         } catch (err) {
             console.log("Error getting data: " + err);
-            reject(null);
+            reject(err);
         }
     });
 
