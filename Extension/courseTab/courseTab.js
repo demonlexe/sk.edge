@@ -2,6 +2,13 @@ import { getLocalStorage, setLocalStorage } from "../localStorage.js";
 import { createGradeChart } from "../common/gradeChart.js";
 import { getProfessorGradeList } from "../nebula.js";
 
+async function settingsClicked() {
+    window.location = "../settingsTab/settingsTab.html";
+}
+
+let settingsBtn = $("#settings-btn");
+settingsBtn.on("click", settingsClicked);
+
 const params = new URLSearchParams(document.location.search);
 const subjectPrefix = params.get("subjectPrefix");
 const courseNumber = params.get("courseNumber");
@@ -9,28 +16,41 @@ const professors = params.get("professors").split(",");
 console.log(subjectPrefix, courseNumber, professors);
 
 function getData() {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
         // check if course has been cached 
-        const lastCourseFetched = await getLocalStorage("last_course_fetched");
-        await setLocalStorage("professors", professors);
-        if (subjectPrefix == lastCourseFetched?.subjectPrefix && courseNumber == lastCourseFetched?.courseNumber) {
-            console.log("Using cached professor data");
-            const data = await getLocalStorage("professor_data");
-            resolve(data);
-        }
-        else {
-            console.log("Fetching professor data");
-            const parsedProfessors = []
-            professors.forEach(elem => {
-                const arr = elem.split(' ');
-                parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
-            });
-
-            const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
-            await setLocalStorage("professor_data", data);
-            await setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+        try {
+            const lastCourseFetched = await getLocalStorage("last_course_fetched");
             await setLocalStorage("professors", professors);
-            resolve(data);
+            if (subjectPrefix == lastCourseFetched?.subjectPrefix && courseNumber == lastCourseFetched?.courseNumber) {
+                console.log("Using cached professor data");
+                const data = await getLocalStorage("professor_data");
+                resolve(data);
+            }
+            else {
+                console.log("Fetching professor data");
+                const parsedProfessors = []
+                professors.forEach(elem => {
+                    const arr = elem.split(' ');
+                    parsedProfessors.push(arr[0] + " " + arr[arr.length - 1]);
+                });
+
+                const data = await getProfessorGradeList(subjectPrefix, courseNumber, parsedProfessors);
+                await setLocalStorage("professor_data", data);
+                await setLocalStorage("last_course_fetched", { subjectPrefix, courseNumber });
+                await setLocalStorage("professors", professors);
+                resolve(data);
+            }
+        }
+        catch (err) {
+            console.log("Fetch failed: " + err.message);
+            $("body").append(
+                `<div id="fetch-failed-alert" class="alert alert-danger fade show" role="alert">
+                    <strong>${err.message}.</strong>
+                    This is likely due to an incorrect API Key; please click the ⚙ icon.
+                </div>`
+            );
+            let mySpinner = $("#spinner-div").detach();
+            reject(err);
         }
     });
 }
