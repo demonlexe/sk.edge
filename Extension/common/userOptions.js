@@ -21,6 +21,7 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
     $("#save-successful").remove();
 
     let missingGpa = false;
+    let invalidGpa = false;
     let missingSchool = false;
     let missingApiKey = false;
     let nebulaTestSucceeded = false;
@@ -28,6 +29,10 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
     if (!gpa || gpa.length < 1) {
         missingGpa = true;
     }
+    else if (isNaN(gpa) || gpa > 4 || gpa < 0 ) {
+        invalidGpa = true;
+    }
+
     if (!school || school.length < 3) {
         missingSchool = true;
     }
@@ -46,7 +51,7 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
         nebulaTestSucceeded = await testNebulaAPIKey(nebulaApiKey);
     }
 
-    if (!missingGpa && !missingSchool && !missingApiKey && nebulaTestSucceeded) {
+    if (!missingGpa && !missingSchool && !missingApiKey && !invalidGpa && nebulaTestSucceeded) {
         await setData('student_gpa',gpa);
         await setData('student_school',school);
         await setData('nebulaApiKey',nebulaApiKey);
@@ -83,8 +88,12 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
         btnClicked.attr("disabled",false);
     } else {
         $(`#spinner-div`).remove();
-        if (missingGpa || missingSchool) {
-            let missingStr = (missingGpa && missingSchool) ? "Please input your GPA and School!" : ((missingGpa) ? "Please input your GPA!" : "Please input your School!");
+        if (missingGpa || invalidGpa || missingSchool) {
+            let missingStr = (missingGpa && missingSchool) ? "Please input your GPA and School!" : 
+            ((missingGpa) ? "Please input your GPA!" : 
+            (invalidGpa) ? "Please input a <strong>valid</strong> GPA! [0.0 - 4.0]" : 
+            "Please input your School!");
+
             $(`#${menuName}-card`).append(`
             <div id="${menuName}-missing-alert" class="alert alert-warning alert-dismissible fade show" role="alert">
             ${missingStr}
