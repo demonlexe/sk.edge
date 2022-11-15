@@ -1,3 +1,5 @@
+import { getData } from "./chrome_store.js";
+
 const allRmpTags = [
     "BEWARE OF POP QUIZZES",
     "CARING",
@@ -31,11 +33,26 @@ function intersect_arrays(a, b) {
     return common;
 }
 
-const APIKEY = window.localStorage.getItem("apiKey");
+let NEBULA_API_KEY = await getData("nebulaApiKey");
+if (NEBULA_API_KEY == null) {
+    NEBULA_API_KEY = localStorage.getItem("apiKey");
+    // Case for if we want to use developer's localStorage for this (Adam)
+    
+}
+else {
+    // FIXME: Add cases for other browsers in future if needed? But these should work
+}
+
+// Important for allowing user to change their API key, live
+export function setNebulaAPIKey(key)
+{
+    console.log("Changing NEBULA_API_KEY to ",key);
+    NEBULA_API_KEY = key;
+}
 
 function getNebulaProfessor(professorName) {
     const headers = {
-        "x-api-key": APIKEY,
+        "x-api-key": NEBULA_API_KEY,
         Accept: "application/json",
     };
     const getDataPromise = new Promise((resolve, reject) => {
@@ -68,7 +85,7 @@ function getNebulaProfessor(professorName) {
 
 function getNebulaCourse(coursePrefix, courseNumber) {
     const headers = {
-        "x-api-key": APIKEY,
+        "x-api-key": NEBULA_API_KEY,
         Accept: "application/json",
     };
 
@@ -99,7 +116,7 @@ function getNebulaCourse(coursePrefix, courseNumber) {
 
 function getNebulaSection(section_id) {
     const headers = {
-        "x-api-key": APIKEY,
+        "x-api-key": NEBULA_API_KEY,
         Accept: "application/json",
     };
 
