@@ -97,7 +97,7 @@ function getProfessorNames() {
 chrome.storage.sync.get('user_setup_complete', (result) => {
 	let isComplete = result['user_setup_complete'];
 	if (isComplete != null && isComplete == true) {
-		console.log("User setup confirmed to be complete.");
+		// console.log("User setup confirmed to be complete.");
 		Promise.all([getCourseData(), getProfessorNames()]).then(([courseData, professors]) => {
 			console.log(courseData.subjectPrefix, courseData.courseNumber, professors);
 			sendCourseDataToExtension(courseData.subjectPrefix, courseData.courseNumber, professors);
