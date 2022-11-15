@@ -79,7 +79,8 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
                 break;
             }
         }
-        
+        // If we reach this line
+        btnClicked.attr("disabled",false);
     } else {
         $(`#spinner-div`).remove();
         if (missingGpa || missingSchool) {
