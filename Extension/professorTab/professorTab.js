@@ -27,10 +27,14 @@ const mockData = {
 
 const params = new URLSearchParams(document.location.search);
 const professorId = params.get("professorId");
+const rmpId = params.get("rmpId");
+const professor = params.get("professor");
+
 const data = await getLocalStorage("professor_data");
 
 // get data with professorId
-const professorData = data.filter((elem) => elem.professorId == professorId)[0];
+console.log("data from localStorage is ",data);
+const professorData = data.filter((elem) => (elem.professorId == professorId || elem.id == rmpId || elem.professor == professor))[0];
 console.log(professorData);
 
 $('#return-btn').on('click', async () => {
@@ -45,8 +49,12 @@ let currentChart = null;
 updateProfessorData(professorData);
 
 function updateProfessorData(data) {
+    if (!data) {
+        console.error("professTab.js: updateProfessorData: professorData passed is undefined.")
+        return;
+    }
     $("#prof-name").text(data.professor);
-    $("#prof-rating-val").text(data.rmp);
+    $("#prof-rating-val").text(data.rmp ? data.rmp : "_");
 
 	const gradesQuery = `${data.professor.replace(" ", "+")}+${data.subjectPrefix}+${data.courseNumber}`;
 	$("#utd-grades-link").on('click', funct => {
@@ -68,7 +76,11 @@ function updateProfessorData(data) {
         window.open(`https://coursebook.utdallas.edu/`, '_blank');
     });
 
-    if (data.rmp < 2) {
+    if (data.rmp == "_" || data.rmp == "N/A" || !data.rmp) {
+        $("#prof-rating-val").css("color", "black");
+        $("#prof-rating-val").css("font-style", "italic");
+    }
+    else if (data.rmp < 2) {
         $("#prof-rating-val").css("color", "red");
     } else if (data.rmp < 3) {
         $("#prof-rating-val").css("color", "orange");
@@ -77,20 +89,30 @@ function updateProfessorData(data) {
     } else {
         $("#prof-rating-val").css("color", "lime");
     }
-
-    $("#prof-difficulty-val").text(data.difficulty);
-    if (data.difficulty < 2) {
+    
+    let profDifficulty = !isNaN(data.difficulty) && data.difficulty >= 1 ? data.difficulty : "_";
+    $("#prof-difficulty-val").text(profDifficulty);
+    if (profDifficulty == "_") {
+        $("#prof-difficulty-val").css("color", "black");
+        $("#prof-difficulty-val").css("font-style", "italic");
+    }
+    else if (profDifficulty < 2) {
         $("#prof-difficulty-val").css("color", "lime");
-    } else if (data.difficulty < 3) {
+    } else if (profDifficulty < 3) {
         $("#prof-difficulty-val").css("color", "green");
-    } else if (data.difficulty < 4) {
+    } else if (profDifficulty < 4) {
         $("#prof-difficulty-val").css("color", "orange");
     } else {
         $("#prof-difficulty-val").css("color", "red");
     }
 
-    $("#prof-would-take-again-val").text(data.wouldTakeAgainPercent.toFixed(1));
-    if (data.wouldTakeAgainPercent > 80) {
+    let wouldTakePercent = !isNaN(data.wouldTakeAgainPercent) && data.wouldTakeAgainPercent >= 0 ? data.wouldTakeAgainPercent.toFixed(1) : "_";
+    $("#prof-would-take-again-val").text(wouldTakePercent);
+    if (wouldTakePercent == "_") {
+        $("#prof-would-take-again-val").css("color", "black");
+        $("#prof-would-take-again-val").css("font-style", "italic");
+    }
+    else if (data.wouldTakeAgainPercent > 80) {
         $("#prof-would-take-again-val").css("color", "lime");
     } else if (data.wouldTakeAgainPercent > 60) {
         $("#prof-would-take-again-val").css("color", "green");

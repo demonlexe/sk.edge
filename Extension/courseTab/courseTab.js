@@ -137,12 +137,17 @@ data.forEach((elem, idx) => {
         </div>`
     );
 
-    $(`#rmp-score-${idx}`).text(elem.rmp ?? "N/A");
-    if (elem.rmp < 2) {
+    let rmpVal = !isNaN(elem.rmp) ? elem.rmp : "N/A";
+    $(`#rmp-score-${idx}`).text(rmpVal);
+    if (rmpVal == "_" || rmpVal == "N/A") {
+        $(`#rmp-score-${idx}`).css("color", "black");
+        $(`#rmp-score-${idx}`).css("font-style", "italic");
+    }
+    else if (rmpVal < 2) {
         $(`#rmp-score-${idx}`).css("color", "red");
-    } else if (elem.rmp < 3) {
+    } else if (rmpVal < 3) {
         $(`#rmp-score-${idx}`).css("color", "orange");
-    } else if (elem.rmp < 4) {
+    } else if (rmpVal < 4) {
         $(`#rmp-score-${idx}`).css("color", "green");
     } else {
         $(`#rmp-score-${idx}`).css("color", "lime");
@@ -154,7 +159,7 @@ data.forEach((elem, idx) => {
 
     $(`#prof-details-button-${idx}`).on("click", () => {
         // console.log("clicked");
-        window.location = "../professorTab/professorTab.html?professorId=" + elem.professorId;
+        window.location = "../professorTab/professorTab.html?professor="+elem.professor+"&rmpId="+elem.id+"&professorId=" + elem.professorId;
     });
 
     // if no grade data

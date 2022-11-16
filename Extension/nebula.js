@@ -244,6 +244,7 @@ export async function getProfessorGradeList(
                 professor: professorName,
                 professorId: getProfessorId(professor),
                 rmp: "_",
+                difficulty: "_",
                 grades: [],
                 numRatings: 0,
                 subjectPrefix,
@@ -285,7 +286,7 @@ export async function getProfessorGradeList(
                 professorCourseInfoList[i].numRatings = data[j].num_ratings;
                 professorCourseInfoList[i].id = data[j].rmp_id;
                 professorCourseInfoList[i].rmpTags = getRandomRpmTags();
-                professorCourseInfoList[i].difficulty = data[j].difficulty;
+                professorCourseInfoList[i].difficulty = (data[j].difficulty ? data[j].difficulty : "_");
                 professorCourseInfoList[i].wouldTakeAgainPercent = data[j].would_take_again;
             }
         }
