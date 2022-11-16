@@ -6,7 +6,56 @@ async function settingsClicked() {
     window.location = "../settingsTab/settingsTab.html";
 }
 
+function compareRmpScore(modifier) {
+    let professorElements = $("#prof-table").children();
+            let orderedElements = [];
+            // Detach all elements
+            for (const prof of professorElements) {
+                // console.log(prof);
+                $(prof).detach();
+                orderedElements.push(prof);
+            }
+            // Sort professors.
+            orderedElements.sort(function(a,b) {
+                let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
+                let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
+                // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
+                
+                if (isNaN(rmpScoreA) || isNaN(rmpScoreB)) {return 0;}
+
+                if (modifier == "rmp-ascend") {
+                    return (rmpScoreB - rmpScoreA);
+                }
+                else if (modifier == "rmp-descend") {
+                    return (rmpScoreA - rmpScoreB);
+                }
+                return 0;
+            })
+            for (const prof of orderedElements) {
+                $("#prof-table").append($(prof));
+            }
+}
+
+async function reorderGrid(sortby) {
+    switch (sortby) {
+        case "rmp-ascend":
+        {
+            compareRmpScore(sortby);
+            break;
+        }
+        case "rmp-descend":
+        {
+            compareRmpScore(sortby);
+            break;
+        }
+    }
+}
+
 let settingsBtn = $("#settings-btn");
+let sortByBtn = $("#sort-by-selection");
+sortByBtn.on("change", () => {
+    reorderGrid(sortByBtn.val());
+});
 settingsBtn.on("click", settingsClicked);
 
 const params = new URLSearchParams(document.location.search);
@@ -104,7 +153,7 @@ data.forEach((elem, idx) => {
     });
 
     $(`#prof-details-button-${idx}`).on("click", () => {
-        console.log("clicked");
+        // console.log("clicked");
         window.location = "../professorTab/professorTab.html?professorId=" + elem.professorId;
     });
 
@@ -125,3 +174,6 @@ data.forEach((elem, idx) => {
     const ctx = document.getElementById(`grades-${idx}`).getContext('2d');
     createGradeChart(ctx, elem.grades[0].distribution);
 });
+
+// Force sorting to be rmp-ascend
+sortByBtn.val('rmp-ascend').trigger('change');
