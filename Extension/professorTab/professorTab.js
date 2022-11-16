@@ -90,7 +90,7 @@ function updateProfessorData(data) {
         $("#prof-rating-val").css("color", "lime");
     }
     
-    let profDifficulty = !isNaN(data.difficulty) && data.difficulty >= 1 ? data.difficulty : "_";
+    let profDifficulty = data.difficulty && !isNaN(data.difficulty) && data.difficulty >= 1 ? data.difficulty : "_";
     $("#prof-difficulty-val").text(profDifficulty);
     if (profDifficulty == "_") {
         $("#prof-difficulty-val").css("color", "black");
@@ -106,7 +106,8 @@ function updateProfessorData(data) {
         $("#prof-difficulty-val").css("color", "red");
     }
 
-    let wouldTakePercent = !isNaN(data.wouldTakeAgainPercent) && data.wouldTakeAgainPercent >= 0 ? data.wouldTakeAgainPercent.toFixed(1) : "_";
+    // console.log("Percent is ",data.wouldTakeAgainPercent);
+    let wouldTakePercent = data.wouldTakeAgainPercent && !isNaN(data.wouldTakeAgainPercent) && data.wouldTakeAgainPercent >= 0 ? data.wouldTakeAgainPercent.toFixed(1) : "_";
     $("#prof-would-take-again-val").text(wouldTakePercent);
     if (wouldTakePercent == "_") {
         $("#prof-would-take-again-val").css("color", "black");
