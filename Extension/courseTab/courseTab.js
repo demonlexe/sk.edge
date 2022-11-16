@@ -8,54 +8,51 @@ async function settingsClicked() {
 
 function compareRmpScore(modifier, considerHasGradeDistribution) {
     let professorElements = $("#prof-table").children();
-            let orderedElements = [];
-            // Detach all elements
-            for (const prof of professorElements) {
-                // console.log(prof);
-                $(prof).detach();
-                orderedElements.push(prof);
-            }
-            // Sort professors.
-            orderedElements.sort(function(a,b) {
-                let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
-                let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
-                // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
+    
+    // Sort professors.
+    professorElements.sort(function(a,b) {
+        let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
+        let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
+        // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
 
-                if (isNaN(rmpScoreA) && isNaN(rmpScoreB)) {
-                    if (considerHasGradeDistribution) //Then we want to know if one has grades and the other doesn't.
-                    {
-                        let canvasElemA = $(a).find('[id*="no-grade-data"]').text();
-                        let canvasElemB = $(b).find('[id*="no-grade-data"]').text();
-                        if (canvasElemA && !canvasElemB){
-                            // Then elemA has no data, and B does
-                            return 1;
-                        }
-                        else if (canvasElemB && !canvasElemA) {
-                            // Then elemB has data, and elemA does not
-                            return -1;
-                        }
-                        
-                    }
-                    return 0; //N/A is equal
-                }
-                else if (isNaN(rmpScoreB)) {
-                    return -1;
-                }
-                else if (isNaN(rmpScoreA)) {
+        if (isNaN(rmpScoreA) && isNaN(rmpScoreB)) {
+            if (considerHasGradeDistribution) //Then we want to know if one has grades and the other doesn't.
+            {
+                let canvasElemA = $(a).find('[id*="no-grade-data"]').text();
+                let canvasElemB = $(b).find('[id*="no-grade-data"]').text();
+                if (canvasElemA && !canvasElemB){
+                    // Then elemA has no data, and B does
                     return 1;
                 }
-
-                if (modifier == "rmp-ascend") {
-                    return (rmpScoreB - rmpScoreA);
+                else if (canvasElemB && !canvasElemA) {
+                    // Then elemB has data, and elemA does not
+                    return -1;
                 }
-                else if (modifier == "rmp-descend") {
-                    return (rmpScoreA - rmpScoreB);
-                }
-                return 0;
-            })
-            for (const prof of orderedElements) {
-                $("#prof-table").append($(prof));
+                
             }
+            return 0; //N/A is equal
+        }
+        else if (isNaN(rmpScoreB)) {
+            return -1;
+        }
+        else if (isNaN(rmpScoreA)) {
+            return 1;
+        }
+
+        if (modifier == "rmp-ascend") {
+            return (rmpScoreB - rmpScoreA);
+        }
+        else if (modifier == "rmp-descend") {
+            return (rmpScoreA - rmpScoreB);
+        }
+        return 0;
+    })
+
+    for (const prof of professorElements) {
+        // Detach from current order, insert at end
+        $(prof).detach();
+        $("#prof-table").append($(prof));
+    }
 }
 
 async function reorderGrid(sortby) {
