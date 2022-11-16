@@ -6,46 +6,65 @@ async function settingsClicked() {
     window.location = "../settingsTab/settingsTab.html";
 }
 
-function compareRmpScore(modifier) {
+function compareRmpScore(modifier, considerHasGradeDistribution) {
     let professorElements = $("#prof-table").children();
-            let orderedElements = [];
-            // Detach all elements
-            for (const prof of professorElements) {
-                // console.log(prof);
-                $(prof).detach();
-                orderedElements.push(prof);
-            }
-            // Sort professors.
-            orderedElements.sort(function(a,b) {
-                let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
-                let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
-                // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
-                
-                if (isNaN(rmpScoreA) || isNaN(rmpScoreB)) {return 0;}
+    
+    // Sort professors.
+    professorElements.sort(function(a,b) {
+        let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
+        let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
+        // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
 
-                if (modifier == "rmp-ascend") {
-                    return (rmpScoreB - rmpScoreA);
+        if (isNaN(rmpScoreA) && isNaN(rmpScoreB)) {
+            if (considerHasGradeDistribution) //Then we want to know if one has grades and the other doesn't.
+            {
+                let canvasElemA = $(a).find('[id*="no-grade-data"]').text();
+                let canvasElemB = $(b).find('[id*="no-grade-data"]').text();
+                if (canvasElemA && !canvasElemB){
+                    // Then elemA has no data, and B does
+                    return 1;
                 }
-                else if (modifier == "rmp-descend") {
-                    return (rmpScoreA - rmpScoreB);
+                else if (canvasElemB && !canvasElemA) {
+                    // Then elemB has data, and elemA does not
+                    return -1;
                 }
-                return 0;
-            })
-            for (const prof of orderedElements) {
-                $("#prof-table").append($(prof));
+                
             }
+            return 0; //N/A is equal
+        }
+        else if (isNaN(rmpScoreB)) {
+            return -1;
+        }
+        else if (isNaN(rmpScoreA)) {
+            return 1;
+        }
+
+        if (modifier == "rmp-ascend") {
+            return (rmpScoreB - rmpScoreA);
+        }
+        else if (modifier == "rmp-descend") {
+            return (rmpScoreA - rmpScoreB);
+        }
+        return 0;
+    })
+
+    for (const prof of professorElements) {
+        // Detach from current order, insert at end
+        $(prof).detach();
+        $("#prof-table").append($(prof));
+    }
 }
 
 async function reorderGrid(sortby) {
     switch (sortby) {
         case "rmp-ascend":
         {
-            compareRmpScore(sortby);
+            compareRmpScore(sortby, true);
             break;
         }
         case "rmp-descend":
         {
-            compareRmpScore(sortby);
+            compareRmpScore(sortby, true);
             break;
         }
     }
@@ -137,12 +156,17 @@ data.forEach((elem, idx) => {
         </div>`
     );
 
-    $(`#rmp-score-${idx}`).text(elem.rmp ?? "N/A");
-    if (elem.rmp < 2) {
+    let rmpVal = !isNaN(elem.rmp) && elem.rmp >= 1 ? elem.rmp : "N/A";
+    $(`#rmp-score-${idx}`).text(rmpVal);
+    if (rmpVal == "_" || rmpVal == "N/A") {
+        $(`#rmp-score-${idx}`).css("color", "black");
+        $(`#rmp-score-${idx}`).css("font-style", "italic");
+    }
+    else if (rmpVal < 2) {
         $(`#rmp-score-${idx}`).css("color", "red");
-    } else if (elem.rmp < 3) {
+    } else if (rmpVal < 3) {
         $(`#rmp-score-${idx}`).css("color", "orange");
-    } else if (elem.rmp < 4) {
+    } else if (rmpVal < 4) {
         $(`#rmp-score-${idx}`).css("color", "green");
     } else {
         $(`#rmp-score-${idx}`).css("color", "lime");
@@ -154,13 +178,13 @@ data.forEach((elem, idx) => {
 
     $(`#prof-details-button-${idx}`).on("click", () => {
         // console.log("clicked");
-        window.location = "../professorTab/professorTab.html?professorId=" + elem.professorId;
+        window.location = "../professorTab/professorTab.html?professor="+elem.professor+"&rmpId="+elem.id+"&professorId=" + elem.professorId;
     });
 
     // if no grade data
     if (!elem.grades || !elem.grades.length) {
         $(`#grades-container-${idx}`).append(
-            `<div class="card-footer text-muted">
+            `<div id="no-grade-data-${idx}" class="card-footer text-muted">
                 No grade data available
             </div>`
         );
