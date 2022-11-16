@@ -6,7 +6,7 @@ async function settingsClicked() {
     window.location = "../settingsTab/settingsTab.html";
 }
 
-function compareRmpScore(modifier) {
+function compareRmpScore(modifier, considerHasGradeDistribution) {
     let professorElements = $("#prof-table").children();
             let orderedElements = [];
             // Detach all elements
@@ -19,9 +19,23 @@ function compareRmpScore(modifier) {
             orderedElements.sort(function(a,b) {
                 let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
                 let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
-                console.log("A is " + rmpScoreA," B is " + rmpScoreB);
+                // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
 
                 if (isNaN(rmpScoreA) && isNaN(rmpScoreB)) {
+                    if (considerHasGradeDistribution) //Then we want to know if one has grades and the other doesn't.
+                    {
+                        let canvasElemA = $(a).find('[id*="no-grade-data"]').text();
+                        let canvasElemB = $(b).find('[id*="no-grade-data"]').text();
+                        if (canvasElemA && !canvasElemB){
+                            // Then elemA has no data, and B does
+                            return 1;
+                        }
+                        else if (canvasElemB && !canvasElemA) {
+                            // Then elemB has data, and elemA does not
+                            return -1;
+                        }
+                        
+                    }
                     return 0; //N/A is equal
                 }
                 else if (isNaN(rmpScoreB)) {
@@ -48,12 +62,12 @@ async function reorderGrid(sortby) {
     switch (sortby) {
         case "rmp-ascend":
         {
-            compareRmpScore(sortby);
+            compareRmpScore(sortby, true);
             break;
         }
         case "rmp-descend":
         {
-            compareRmpScore(sortby);
+            compareRmpScore(sortby, true);
             break;
         }
     }
@@ -173,7 +187,7 @@ data.forEach((elem, idx) => {
     // if no grade data
     if (!elem.grades || !elem.grades.length) {
         $(`#grades-container-${idx}`).append(
-            `<div class="card-footer text-muted">
+            `<div id="no-grade-data-${idx}" class="card-footer text-muted">
                 No grade data available
             </div>`
         );
