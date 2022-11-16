@@ -1,0 +1,78 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>sk.edge</title>
+        <link rel="stylesheet" href="../styles.css">
+        <link href="../assets/bootstrap.min.css" rel="stylesheet">
+		<script type='text/javascript' src='../assets/chart.js'></script>
+		<script src="../assets/bootstrap.bundle.min.js"></script>
+		<script src="../assets/jquery-3.6.1.js"></script>
+		<script type="module" src="./helpTab.js"></script>
+      </head>
+      <body style="min-width:200px;">
+        <div id="dashboard-page" class="mainPg">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <button class="topRightBtn btn" id="back-btn">⮌</button>
+                  <h5 class="card-title">Help with sk.edge </h5>  
+                  <p class="card-text">This tool was first designed at HackUTD IX  for students at the <span style='color: #df560c;'>University of Texas at Dallas</span>.</p>
+                <p>It was created by <a href="https://www.linkedin.com/in/bradwj/" id="bradley-johnson">Bradley Johnson</a>, <a href="https://www.linkedin.com/in/adam-szumski/" id="adam-szumski">Adam Szumski</a>,
+                 and <a href="https://www.linkedin.com/in/alexiskau/" id="alexis-kaufman">Alexis Kaufman.</a> </p>
+                 <em>*We recommend that you pin our extension for easy access.</em> <br><br>   
+                 <p> 
+                    <strong class="center-block">FAQ :</strong>
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                              How do I use this tool?
+                            </button>
+                          </h2>
+                          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ol>
+                                    <li>Open up Orion, then log into schedule planner.</li>
+                                    <li>Click "Options" next to the course you want to know more about.</li>
+                                    <li>Our extension will automatically insert the Professor name into the page.</li>
+                                    <li>A "!" will pop-up next to the sk.edge extension icon in your browser's toolbar.</li>
+                                    <li>Click on the <img src="../assets/poosh.png" style="width:25px;height:25px;"></img> icon!</li>
+                                </ol>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              What external APIs does this tool use?
+                            </button>
+                          </h2>
+                          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li>Nebula API to access grade distributions.</li>
+                                    <li>Modified version of a RateMyProfessor API to obtain professor ratings.</li>
+                                </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                What if I don't attend UTD?
+                            </button>
+                          </h2>
+                          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                              We hope to be able to extend this project to other universities! 
+                              <br><br>Please contact the developers and we would be happy to work with developers from other schools to implement this tool for you!
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </p>
+                </div>
+              </div>
+        </div>
+    </body>
+</html>
