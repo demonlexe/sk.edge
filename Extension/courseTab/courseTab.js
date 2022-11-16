@@ -19,9 +19,17 @@ function compareRmpScore(modifier) {
             orderedElements.sort(function(a,b) {
                 let rmpScoreA = $(a).find('[id*="rmp-score"]').text();
                 let rmpScoreB = $(b).find('[id*="rmp-score"]').text();
-                // console.log("A is " + rmpScoreA," B is " + rmpScoreB);
-                
-                if (isNaN(rmpScoreA) || isNaN(rmpScoreB)) {return 0;}
+                console.log("A is " + rmpScoreA," B is " + rmpScoreB);
+
+                if (isNaN(rmpScoreA) && isNaN(rmpScoreB)) {
+                    return 0; //N/A is equal
+                }
+                else if (isNaN(rmpScoreB)) {
+                    return -1;
+                }
+                else if (isNaN(rmpScoreA)) {
+                    return 1;
+                }
 
                 if (modifier == "rmp-ascend") {
                     return (rmpScoreB - rmpScoreA);
@@ -137,7 +145,7 @@ data.forEach((elem, idx) => {
         </div>`
     );
 
-    let rmpVal = !isNaN(elem.rmp) ? elem.rmp : "N/A";
+    let rmpVal = !isNaN(elem.rmp) && elem.rmp >= 1 ? elem.rmp : "N/A";
     $(`#rmp-score-${idx}`).text(rmpVal);
     if (rmpVal == "_" || rmpVal == "N/A") {
         $(`#rmp-score-${idx}`).css("color", "black");
