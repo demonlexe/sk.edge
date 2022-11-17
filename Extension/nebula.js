@@ -277,53 +277,28 @@ export async function getProfessorGradeList(
     const data = await getRMPData(professorList);
     for (let i = 0; i < professorCourseInfoList.length; i++) {
         for (let j = 0; j < data.length; j++) {
-            const noMiddleName =
-                data[j].name.split(" ")[0] +
-                " " +
-                data[j].name.split(" ")[data[j].name.split(" ").length - 1];
+            const noMiddleName = data[i].firstName + " " + data[i].lastName;
             if (professorCourseInfoList[i].professor == noMiddleName) {
-                professorCourseInfoList[i].rmp = data[j].rating;
-                professorCourseInfoList[i].numRatings = data[j].num_ratings;
-                professorCourseInfoList[i].id = data[j].rmp_id;
+                professorCourseInfoList[i].rmp = data[j].avgRating;
+                professorCourseInfoList[i].numRatings = data[j].numRatings;
+                professorCourseInfoList[i].id = atob(data[j].id);
                 professorCourseInfoList[i].rmpTags = getRandomRpmTags();
-                professorCourseInfoList[i].difficulty = (data[j].difficulty ? data[j].difficulty : "_");
-                professorCourseInfoList[i].wouldTakeAgainPercent = data[j].would_take_again;
+                professorCourseInfoList[i].difficulty = (data[j].avgDifficulty ? data[j].avgDifficulty : "_");
+                professorCourseInfoList[i].wouldTakeAgainPercent = data[j].wouldTakeAgainPercent;
             }
         }
     }
     return professorCourseInfoList;
 }
 
-export async function getRMPData(professors) {
-    const headers = {
-        "Content-Type": "application/json",
-    };
-
-    const getDataPromise = new Promise((resolve, reject) => {
-        try {
-            fetch(
-                `https://us-central1-hackutdix.cloudfunctions.net/get_professors`,
-                {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify({
-                        names: professors,
-                        school: "university of texas dallas",
-                    }),
-                }
-            )
-                .then(function (res) {
-                    resolve(res.json());
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    reject(null);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            reject(null);
-        }
+export function getRMPData(professors) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({type: "REQUEST_PROFESSORS", profName: professors, schoolId: "1273"}, response => {
+            if(response != null) {
+                resolve(response);
+            } else {
+                reject('Something wrong');
+            }
+        });
     });
-
-    return getDataPromise;
 }

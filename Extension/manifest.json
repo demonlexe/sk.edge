@@ -24,6 +24,7 @@
       "webNavigation"
     ],
     "host_permissions": [
-        "*://utdallas.collegescheduler.com/terms/*/courses/*"
+        "*://utdallas.collegescheduler.com/terms/*/courses/*",
+        "https://www.ratemyprofessors.com/"
     ]
   }
