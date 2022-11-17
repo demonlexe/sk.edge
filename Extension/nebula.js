@@ -290,7 +290,6 @@ export async function getProfessorGradeList(
         const gradeObjects = [];
         const profSections = await Promise.all(intersection.map(i => getNebulaSection(i)));
         for (const elem of profSections) {
-            console.log(elem);
             const section = elem;
             const gradeDistribution = getGradeDist(section);
             if (gradeDistribution?.length > 0) {
