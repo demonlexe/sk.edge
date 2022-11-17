@@ -8,5 +8,5 @@ if (isComplete != null && isComplete == true) {
     window.location = "./dashboardTab/dashboardTab.html";
 }
 else {
-    window.location = './setupTab/setupTab.html';
+    window.location = './acknowledgeTab/acknowledgeTab.html';
 }
