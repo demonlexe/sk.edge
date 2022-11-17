@@ -138,6 +138,38 @@ function getNebulaCourse(coursePrefix, courseNumber) {
     return getDataPromise;
 }
 
+// will be used in the future
+function getNebulaSections(courseReference, professorReference) {
+    const headers = {
+        "x-api-key": unRegister(NEBULA_API_KEY),
+        Accept: "application/json",
+    };
+
+    const getDataPromise = new Promise((resolve, reject) => {
+        try {
+            fetch(
+                `https://api.utdnebula.com/section?course_reference=${courseReference}&professors=${professorReference}`,
+                {
+                    method: "GET",
+                    headers: headers,
+                }
+            )
+                .then(function (res) {
+                    resolve(res.json());
+                })
+                .catch(function (err) {
+                    console.log("Nebula error is: ",err);
+                    reject(err);
+                });
+        } catch (err) {
+            console.log("Error getting data: " + err);
+            reject(err);
+        }
+    });
+
+    return getDataPromise;
+}
+
 function getNebulaSection(section_id) {
     const headers = {
         "x-api-key": unRegister(NEBULA_API_KEY),
@@ -170,6 +202,12 @@ function getSections(tableIn) {
         return null;
     }
     return tableIn.data[0]["sections"];
+}
+function getCourseId(tableIn) {
+    if (tableIn?.data?.[0]?.["_id"]) {
+        return tableIn.data[0]["_id"];
+    }
+    return null;
 }
 function getGradeDist(tableIn) {
     if (!tableIn || !tableIn.data) {
@@ -225,17 +263,19 @@ export async function getProfessorGradeList(
     professorList
 ) {
     const course = await getNebulaCourse(subjectPrefix, courseNumber);
+    const courseId = getCourseId(course);
     const courseInfo = getSections(course);
     // console.log("Course sections: ",courseInfo);
     const professorCourseInfoList = [];
     const promises = professorList.map(async professorName => {
         const professor = await getNebulaProfessor(professorName);
+        const professorId = getProfessorId(professor);
         const professorInfo = getSections(professor);
         if (!professorInfo) {
             professorCourseInfoList.push({
                 id: null,
                 professor: professorName,
-                professorId: getProfessorId(professor),
+                professorId: professorId,
                 rmp: "_",
                 difficulty: "_",
                 grades: [],
@@ -245,10 +285,13 @@ export async function getProfessorGradeList(
             });
             return;
         }
-        const intersection = intersect_arrays(courseInfo, professorInfo);
+        // const intersection = await getNebulaSections(courseId, professorId);
+        const intersection = intersect_arrays(courseInfo, professorInfo)
         const gradeObjects = [];
-        for (const elem of intersection) {
-            const section = await getNebulaSection(elem);
+        const profSections = await Promise.all(intersection.map(i => getNebulaSection(i)));
+        for (const elem of profSections) {
+            console.log(elem);
+            const section = elem;
             const gradeDistribution = getGradeDist(section);
             if (gradeDistribution?.length > 0) {
                 gradeObjects.push({
@@ -260,7 +303,7 @@ export async function getProfessorGradeList(
         }
         professorCourseInfoList.push({
             professor: getProfessorFullName(professor),
-            professorId: getProfessorId(professor),
+            professorId: professorId,
             grades: gradeObjects,
             subjectPrefix,
             courseNumber,
