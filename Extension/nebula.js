@@ -319,7 +319,7 @@ export async function getProfessorGradeList(
             if (professorCourseInfoList[i].professor == noMiddleName) {
                 professorCourseInfoList[i].rmp = data[j].avgRating;
                 professorCourseInfoList[i].numRatings = data[j].numRatings;
-                professorCourseInfoList[i].id = atob(data[j].id);
+                professorCourseInfoList[i].id = data[j].legacyId;
                 professorCourseInfoList[i].rmpTags = getRandomRpmTags();
                 professorCourseInfoList[i].difficulty = (data[j].avgDifficulty ? data[j].avgDifficulty : "_");
                 professorCourseInfoList[i].wouldTakeAgainPercent = data[j].wouldTakeAgainPercent;
