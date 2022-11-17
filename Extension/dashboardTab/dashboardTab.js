@@ -8,6 +8,12 @@ async function helpClicked() {
     window.location = "../helpTab/helpTab.html";
 }
 
+
+$('#nebula-link').on('click', () => {
+    window.open("https://www.utdnebula.com/", "_blank");
+    window.close();
+});
+
 let settingsBtn = $("#settings-btn");
 settingsBtn.on("click", settingsClicked);
 
