@@ -1,18 +1,6 @@
 import { getData } from "./chrome_store.js";
 import { unRegister } from "./assets/colleges.js";
 
-const allRmpTags = [
-    "BEWARE OF POP QUIZZES",
-    "CARING",
-    "ACCESSIBLE OUTSIDE CLASS",
-    "GET READY TO READ",
-    "TOUGH  GRADER",
-    "INSPIRATIONAL",
-    "PARTICIPATION MATTERS",
-    "LECTURE HEAVY",
-    "GROUP PROJECTS",
-];
-
 function intersect_arrays(a, b) {
     var sorted_a = a.concat().sort();
     var sorted_b = b.concat().sort();
@@ -252,11 +240,6 @@ function getProfessorId(tableIn) {
     return null;
 }
 
-function getRandomRpmTags() {
-    const shuffled = [...allRmpTags].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 4);
-}
-
 export async function getProfessorGradeList(
     subjectPrefix,
     courseNumber,
@@ -320,7 +303,7 @@ export async function getProfessorGradeList(
                 professorCourseInfoList[i].rmp = data[j].avgRating;
                 professorCourseInfoList[i].numRatings = data[j].numRatings;
                 professorCourseInfoList[i].id = atob(data[j].id);
-                professorCourseInfoList[i].rmpTags = getRandomRpmTags();
+                professorCourseInfoList[i].teacherRatingTags = data[j].teacherRatingTags;
                 professorCourseInfoList[i].difficulty = (data[j].avgDifficulty ? data[j].avgDifficulty : "_");
                 professorCourseInfoList[i].wouldTakeAgainPercent = data[j].wouldTakeAgainPercent;
             }
