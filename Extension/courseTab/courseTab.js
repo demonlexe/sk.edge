@@ -114,7 +114,7 @@ function getData() {
             $("body").append(
                 `<div id="fetch-failed-alert" class="alert alert-danger fade show" role="alert">
                     <strong>${err.message}.</strong>
-                    This is likely due to an incorrect API Key; please click the ⚙ icon.
+                    This is likely due to an incorrect API Key; please contact the developers.
                 </div>`
             );
             let mySpinner = $("#spinner-div").detach();

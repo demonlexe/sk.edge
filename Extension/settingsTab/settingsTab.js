@@ -18,21 +18,16 @@ saveBtn.on("click", funct => {
 
 let gpa = await getData('student_gpa');
 let school = await getData('student_school');
-let nebulaApiKey = await getData('nebulaApiKey');
 
 let gpaElem = $("#settings-gpa");
 let schoolElem = $("#settings-school");
-let apiKeyElem = $("#settings-api-key");
 
-if (gpaElem && schoolElem && apiKeyElem) 
+if (gpaElem && schoolElem) 
 {
     if (gpa) {
         gpaElem.val(gpa);
     }
     if (school) {
         schoolElem.val(school);
-    }
-    if (nebulaApiKey) {
-        apiKeyElem.val(nebulaApiKey);
     }
 }
