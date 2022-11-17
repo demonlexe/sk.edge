@@ -54,10 +54,11 @@ class Professor:
         self.department = professor_data["department"]
         self.difficulty = professor_data["avgDifficulty"]
         self.rating = professor_data["avgRating"]
-        if professor_data["wouldTakeAgainPercent"] == 0:
-            self.would_take_again = None
-        else:
-            self.would_take_again = professor_data["wouldTakeAgainPercent"]
+        # if professor_data["wouldTakeAgainPercent"] == 0:
+        #     self.would_take_again = None
+        # else:
+        # This needs to be input because 0% is a valid percentage with RMP.
+        self.would_take_again = professor_data["wouldTakeAgainPercent"]
         self.num_ratings = professor_data["numRatings"]
         self.school = School(int(base64.b64decode(
             professor_data["school"]["id"].encode('ascii')).decode('ascii')[7:]))

@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "sk.edge",
+    "description": "the all-in-one registration tool by students, for students",
+    "version": "1.0",
+    "action": {
+      "default_popup": "index.html",
+      "default_icon": "./assets/gray.png"
+    },
+    "content_scripts": [
+    {
+      "matches": ["*://utdallas.collegescheduler.com/terms/*/courses/*"],
+      "css": ["content-script/styles.css"],
+      "js": ["content-script/index.js"]
+    }],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+      "storage",
+      "scripting",
+      "tabs",
+      "activeTab",
+      "webNavigation"
+    ],
+    "host_permissions": [
+        "*://utdallas.collegescheduler.com/terms/*/courses/*"
+    ]
+  }

@@ -1,0 +1,39 @@
+.mainPg {
+    padding: 15px;
+}
+.hiddenElement {
+    visibility: hidden;
+}
+.visibleElement {
+    visibility: visible;
+}
+.highlightedElement {
+    background-color: rgb(255, 117, 117);
+}
+.topRightBtn {
+    float: right;
+}
+.center-block {
+    display: table;
+    margin: 0 auto;
+}
+.inline-with-padding {
+    display: inline-block;
+    padding: 5px;
+}
+.hang-left {
+    display: inline-block;
+    position: relative;
+    float: left;
+    margin: 5px;
+}
+.hang-right {
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin: 5px;
+}
+
+body {
+    min-width:500px;
+}
