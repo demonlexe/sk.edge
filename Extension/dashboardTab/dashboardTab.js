@@ -19,3 +19,8 @@ exitBtn.on("click", () => {
     window.open("https://www.utdallas.edu/galaxy/","_blank")
     window.close();
 });
+
+$('#nebula-link').on('click', () => {
+    window.open("https://www.utdnebula.com/", "_blank");
+    window.close();
+});
