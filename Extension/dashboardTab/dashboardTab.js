@@ -8,12 +8,6 @@ async function helpClicked() {
     window.location = "../helpTab/helpTab.html";
 }
 
-
-$('#nebula-link').on('click', () => {
-    window.open("https://www.utdnebula.com/", "_blank");
-    window.close();
-});
-
 let settingsBtn = $("#settings-btn");
 settingsBtn.on("click", settingsClicked);
 
@@ -23,5 +17,10 @@ helpBtn.on("click", helpClicked);
 let exitBtn = $("#exit-dash-btn");
 exitBtn.on("click", () => { 
     window.open("https://www.utdallas.edu/galaxy/","_blank")
+    window.close();
+});
+
+$('#nebula-link').on('click', () => {
+    window.open("https://www.utdnebula.com/", "_blank");
     window.close();
 });
