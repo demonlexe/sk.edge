@@ -228,7 +228,7 @@ export async function getProfessorGradeList(
     const courseInfo = getSections(course);
     // console.log("Course sections: ",courseInfo);
     const professorCourseInfoList = [];
-    for (const professorName of professorList) {
+    const promises = professorList.map(async professorName => {
         const professor = await getNebulaProfessor(professorName);
         const professorInfo = getSections(professor);
         if (!professorInfo) {
@@ -243,7 +243,7 @@ export async function getProfessorGradeList(
                 subjectPrefix,
                 courseNumber,
             });
-            continue;
+            return;
         }
         const intersection = intersect_arrays(courseInfo, professorInfo);
         const gradeObjects = [];
@@ -265,7 +265,9 @@ export async function getProfessorGradeList(
             subjectPrefix,
             courseNumber,
         });
-    }
+    });
+
+    await Promise.all(promises);
 
     const data = await getRMPData(professorList);
     console.log(data)
