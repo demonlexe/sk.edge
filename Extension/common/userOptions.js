@@ -1,9 +1,8 @@
 import { getData, setData } from "../chrome_store.js";
-import { setNebulaAPIKey, testNebulaAPIKey } from "../nebula.js";
 
 function prettifyString (inName) {
     let newName = "";
-    console.log("inName: " + inName);
+    // console.log("inName: " + inName);
     if (inName.length >= 2) {
         newName = (inName.substring(0,1)).toUpperCase();
         newName += (inName.substring(1,inName.length)).toLowerCase();
@@ -14,17 +13,13 @@ function prettifyString (inName) {
 export async function saveOptionsOnClicked(menuName, btnClicked) {
     let gpa = $(`#${menuName}-gpa`).val();
     let school = $(`#${menuName}-school`).val();
-    let nebulaApiKey = $(`#${menuName}-api-key`).val();
 
     $(`#${menuName}-missing-alert`).remove();
-    $(`#${menuName}-missing-api-key-alert`).remove();
     $("#save-successful").remove();
 
     let missingGpa = false;
     let invalidGpa = false;
     let missingSchool = false;
-    let missingApiKey = false;
-    let nebulaTestSucceeded = false;
 
     if (!gpa || gpa.length < 1) {
         missingGpa = true;
@@ -37,27 +32,9 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
         missingSchool = true;
     }
 
-    if (!nebulaApiKey || nebulaApiKey.length < 10) {
-        missingApiKey = true;
-    }
-    else {
-        // Then we are not missing the ApiKey, so let's test it.
-        $(`#${menuName}-card`).append(`
-        <div id="spinner-div" class="center-block">
-            <div class="spinner-border text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>`);
-        nebulaTestSucceeded = await testNebulaAPIKey(nebulaApiKey);
-    }
-
-    if (!missingGpa && !missingSchool && !missingApiKey && !invalidGpa && nebulaTestSucceeded) {
+    if (!missingGpa && !missingSchool && !invalidGpa) {
         await setData('student_gpa',gpa);
         await setData('student_school',school);
-        await setData('nebulaApiKey',nebulaApiKey);
-        setNebulaAPIKey(nebulaApiKey);
-
-        $(`#spinner-div`).remove();
 
         switch (menuName) {
             case 'setup':
@@ -101,24 +78,24 @@ export async function saveOptionsOnClicked(menuName, btnClicked) {
             </div>
             `);
         }
-        if (missingApiKey) {
-            let missingStr = "Hmm.. Looks like you still need an API key."
-            $(`#${menuName}-card`).append(`
-            <div id="${menuName}-missing-api-key-alert" class="alert alert-warning alert-dismissible fade show" role="alert">
-            ${missingStr}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            `);
-        }
-        else if (!nebulaTestSucceeded) {
-            let missingStr = "Your API key is invalid. Please try again."
-            $(`#${menuName}-card`).append(`
-            <div id="${menuName}-missing-api-key-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
-            ${missingStr}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            `);
-        }
+        // if (missingApiKey) {
+        //     let missingStr = "Hmm.. Looks like you still need an API key."
+        //     $(`#${menuName}-card`).append(`
+        //     <div id="${menuName}-missing-api-key-alert" class="alert alert-warning alert-dismissible fade show" role="alert">
+        //     ${missingStr}
+        //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        //     </div>
+        //     `);
+        // }
+        // else if (!nebulaTestSucceeded) {
+        //     let missingStr = "Your API key is invalid. Please try again."
+        //     $(`#${menuName}-card`).append(`
+        //     <div id="${menuName}-missing-api-key-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        //     ${missingStr}
+        //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        //     </div>
+        //     `);
+        // }
         btnClicked.attr("disabled",false);
     }     
     

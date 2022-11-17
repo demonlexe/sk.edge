@@ -1,4 +1,5 @@
 import { getData } from "./chrome_store.js";
+import { unRegister } from "./assets/colleges.js";
 
 const allRmpTags = [
     "BEWARE OF POP QUIZZES",
@@ -33,57 +34,49 @@ function intersect_arrays(a, b) {
     return common;
 }
 
-let NEBULA_API_KEY = await getData("nebulaApiKey");
-if (NEBULA_API_KEY == null) {
-    NEBULA_API_KEY = localStorage.getItem("apiKey");
-    // Case for if we want to use developer's localStorage for this (Adam)
-    
-}
-else {
-    // FIXME: Add cases for other browsers in future if needed? But these should work
-}
+let NEBULA_API_KEY = "EM~eW}G<}4qx41fp{H=I]OZ5MF6T:1x{<GF:~v<";
 
 // Important for allowing user to change their API key, live
-export function setNebulaAPIKey(key)
-{
-    console.log("Changing NEBULA_API_KEY to ",key);
-    NEBULA_API_KEY = key;
-}
+// export function setNebulaAPIKey(key)
+// {
+//     console.log("Changing NEBULA_API_KEY to ",key);
+//     NEBULA_API_KEY = key;
+// }
 
-export function testNebulaAPIKey(key) {
-    const headers = {
-        "x-api-key": key,
-        Accept: "application/json",
-    };
+// export function testNebulaAPIKey(key) {
+//     const headers = {
+//         "x-api-key": key,
+//         Accept: "application/json",
+//     };
 
-    const getDataPromise = new Promise((resolve) => {
-        try {
-            fetch(
-                `https://api.utdnebula.com/course?course_number=2418&subject_prefix=MATH`,
-                {
-                    method: "GET",
-                    headers: headers,
-                }
-            )
-                .then(function (res) {
-                    resolve(true);
-                })
-                .catch(function (err) {
-                    console.log("Nebula error is: ",err);
-                    resolve(false);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            resolve(false);
-        }
-    });
+//     const getDataPromise = new Promise((resolve) => {
+//         try {
+//             fetch(
+//                 `https://api.utdnebula.com/course?course_number=2418&subject_prefix=MATH`,
+//                 {
+//                     method: "GET",
+//                     headers: headers,
+//                 }
+//             )
+//                 .then(function (res) {
+//                     resolve(true);
+//                 })
+//                 .catch(function (err) {
+//                     console.log("Nebula error is: ",err);
+//                     resolve(false);
+//                 });
+//         } catch (err) {
+//             console.log("Error getting data: " + err);
+//             resolve(false);
+//         }
+//     });
 
-    return getDataPromise;
-}
+//     return getDataPromise;
+// }
 
 function getNebulaProfessor(professorName) {
     const headers = {
-        "x-api-key": NEBULA_API_KEY,
+        "x-api-key": unRegister(NEBULA_API_KEY),
         Accept: "application/json",
     };
     const getDataPromise = new Promise((resolve, reject) => {
@@ -116,7 +109,7 @@ function getNebulaProfessor(professorName) {
 
 function getNebulaCourse(coursePrefix, courseNumber) {
     const headers = {
-        "x-api-key": NEBULA_API_KEY,
+        "x-api-key": unRegister(NEBULA_API_KEY),
         Accept: "application/json",
     };
 
@@ -147,7 +140,7 @@ function getNebulaCourse(coursePrefix, courseNumber) {
 
 function getNebulaSection(section_id) {
     const headers = {
-        "x-api-key": NEBULA_API_KEY,
+        "x-api-key": unRegister(NEBULA_API_KEY),
         Accept: "application/json",
     };
 
