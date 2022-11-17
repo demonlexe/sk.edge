@@ -268,9 +268,10 @@ export async function getProfessorGradeList(
     }
 
     const data = await getRMPData(professorList);
+    console.log(data)
     for (let i = 0; i < professorCourseInfoList.length; i++) {
         for (let j = 0; j < data.length; j++) {
-            const noMiddleName = data[i].firstName + " " + data[i].lastName;
+            const noMiddleName = data[j].firstName + " " + data[j].lastName;
             if (professorCourseInfoList[i].professor == noMiddleName) {
                 professorCourseInfoList[i].rmp = data[j].avgRating;
                 professorCourseInfoList[i].numRatings = data[j].numRatings;
