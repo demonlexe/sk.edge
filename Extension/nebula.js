@@ -198,11 +198,11 @@ function getCourseId(tableIn) {
     return null;
 }
 function getGradeDist(tableIn) {
-    if (!tableIn || !tableIn.data) {
+    if (!tableIn) {
         return null;
     }
     // console.log(tableIn.data);
-    return tableIn.data["grade_distribution"];
+    return tableIn["grade_distribution"];
 }
 
 function getEndDate(tableIn) {
@@ -268,19 +268,18 @@ export async function getProfessorGradeList(
             });
             return;
         }
-        // const intersection = await getNebulaSections(courseId, professorId);
-        const intersection = intersect_arrays(courseInfo, professorInfo)
         const gradeObjects = [];
-        const profSections = await Promise.all(intersection.map(i => getNebulaSection(i)));
-        for (const elem of profSections) {
-            const section = elem;
-            const gradeDistribution = getGradeDist(section);
-            if (gradeDistribution?.length > 0) {
-                gradeObjects.push({
-                    distribution: gradeDistribution,
-                    section: section.data["section_number"],
-                    academicSession: section.data["academic_session"].name,
-                });
+        const profSections = await getNebulaSections(courseId, professorId);
+        if (profSections != null && profSections["data"] != null) {
+            for (const section of profSections["data"]) {
+                const gradeDistribution = getGradeDist(section);
+                if (gradeDistribution?.length > 0) {
+                    gradeObjects.push({
+                        distribution: gradeDistribution,
+                        section: section["section_number"],
+                        academicSession: section["academic_session"].name,
+                    });
+                }
             }
         }
         professorCourseInfoList.push({
