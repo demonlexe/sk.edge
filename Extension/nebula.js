@@ -63,128 +63,42 @@ let NEBULA_API_KEY = "EM~eW}G<}4qx41fp{H=I]OZ5MF6T:1x{<GF:~v<";
 // }
 
 function getNebulaProfessor(professorName) {
-    const headers = {
-        "x-api-key": unRegister(NEBULA_API_KEY),
-        Accept: "application/json",
-    };
-    const getDataPromise = new Promise((resolve, reject) => {
-        try {
-            const nameSplit = professorName.split(" ");
-            const firstName = nameSplit[0];
-            const lastName = nameSplit[nameSplit.length - 1];
-            fetch(
-                `https://api.utdnebula.com/professor?first_name=${firstName}&last_name=${lastName}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                }
-            )
-                .then(function (res) {
-                    resolve(res.json());
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    reject(null);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            reject(null);
-        }
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({type: "GET_NEBULA_PROFESSOR", professorName: professorName}, response => {
+            if(response != null) {
+                resolve(response);
+            } else {
+                reject('Something wrong');
+            }
+        });
     });
-
-    return getDataPromise;
 }
 
 function getNebulaCourse(coursePrefix, courseNumber) {
-    const headers = {
-        "x-api-key": unRegister(NEBULA_API_KEY),
-        Accept: "application/json",
-    };
-
-    const getDataPromise = new Promise((resolve, reject) => {
-        try {
-            fetch(
-                `https://api.utdnebula.com/course?course_number=${courseNumber}&subject_prefix=${coursePrefix}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                }
-            )
-                .then(function (res) {
-                    resolve(res.json());
-                })
-                .catch(function (err) {
-                    console.log("Nebula error is: ",err);
-                    reject(err);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            reject(err);
-        }
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({type: "GET_NEBULA_COURSE", coursePrefix: coursePrefix, courseNumber: courseNumber}, response => {
+            if(response != null) {
+                resolve(response);
+            } else {
+                reject('Something wrong');
+            }
+        });
     });
-
-    return getDataPromise;
 }
 
 // will be used in the future
 function getNebulaSections(courseReference, professorReference) {
-    const headers = {
-        "x-api-key": unRegister(NEBULA_API_KEY),
-        Accept: "application/json",
-    };
-
-    const getDataPromise = new Promise((resolve, reject) => {
-        try {
-            fetch(
-                `https://api.utdnebula.com/section?course_reference=${courseReference}&professors=${professorReference}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                }
-            )
-                .then(function (res) {
-                    resolve(res.json());
-                })
-                .catch(function (err) {
-                    console.log("Nebula error is: ",err);
-                    reject(err);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            reject(err);
-        }
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({type: "GET_NEBULA_SECTIONS", courseReference: courseReference, professorReference: professorReference}, response => {
+            if(response != null) {
+                resolve(response);
+            } else {
+                reject('Something wrong');
+            }
+        });
     });
-
-    return getDataPromise;
 }
 
-function getNebulaSection(section_id) {
-    const headers = {
-        "x-api-key": unRegister(NEBULA_API_KEY),
-        Accept: "application/json",
-    };
-
-    const getDataPromise = new Promise((resolve, reject) => {
-        try {
-            fetch(`https://api.utdnebula.com/section/${section_id}`, {
-                method: "GET",
-                headers: headers,
-            })
-                .then(function (res) {
-                    resolve(res.json());
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    reject(null);
-                });
-        } catch (err) {
-            console.log("Error getting data: " + err);
-            reject(null);
-        }
-    });
-
-    return getDataPromise;
-}
 function getSections(tableIn) {
     if (!tableIn || !tableIn.data) {
         return null;
@@ -311,9 +225,9 @@ export async function getProfessorGradeList(
     return professorCourseInfoList;
 }
 
-export function getRMPData(professors) {
+function getRMPData(professors) {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({type: "REQUEST_PROFESSORS", profName: professors, schoolId: "1273"}, response => {
+        chrome.runtime.sendMessage({type: "REQUEST_PROFESSORS", profNames: professors, schoolId: "1273"}, response => {
             if(response != null) {
                 resolve(response);
             } else {

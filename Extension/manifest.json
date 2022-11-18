@@ -14,7 +14,8 @@
       "js": ["content-script/index.js"]
     }],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "background.js",
+        "type": "module"
     },
     "permissions": [
       "storage",
@@ -23,6 +24,7 @@
     ],
     "host_permissions": [
         "*://utdallas.collegescheduler.com/terms/*/courses/*",
-        "https://www.ratemyprofessors.com/"
+        "https://www.ratemyprofessors.com/",
+        "https://api.utdnebula.com/"
     ]
   }
