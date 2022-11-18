@@ -19,8 +19,6 @@
     "permissions": [
       "storage",
       "scripting",
-      "tabs",
-      "activeTab",
       "webNavigation"
     ],
     "host_permissions": [
