@@ -62,10 +62,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 var profIds = [];
 
                 texts.forEach(text => {
-                    const regex = /"legacyId":(\d+)/;
-                    const match = text.match(regex);
-                    if (match != null) {
-                        profIds.push(match[1]);
+                    const regex = /"legacyId":(\d+).*?"firstName":"(\w+)","lastName":"(\w+)"/g;
+                    for (const match of text.matchAll(regex)) {
+                        if (request.profName.includes(match[2] + " " + match[3])) {
+                            profIds.push(match[1]);
+                        }
                     }
                 })
 
