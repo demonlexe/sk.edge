@@ -2,8 +2,14 @@ import { getLocalStorage, setLocalStorage } from "../localStorage.js";
 import { createGradeChart } from "../common/gradeChart.js";
 import { getProfessorGradeList } from "../nebula.js";
 
+const params = new URLSearchParams(document.location.search);
+const subjectPrefix = params.get("subjectPrefix");
+const courseNumber = params.get("courseNumber");
+const professors = params.get("professors").split(",");
+console.log(subjectPrefix, courseNumber, professors);
+
 async function settingsClicked() {
-    window.location = "../settingsTab/settingsTab.html";
+    window.location = `../settingsTab/settingsTab.html?callingPage=courseTab&subjectPrefix=${subjectPrefix}&courseNumber=${courseNumber}&professors=${professors.join(",")}`;
 }
 
 function compareRmpScore(modifier, considerHasGradeDistribution) {
@@ -76,12 +82,6 @@ sortByBtn.on("change", () => {
     reorderGrid(sortByBtn.val());
 });
 settingsBtn.on("click", settingsClicked);
-
-const params = new URLSearchParams(document.location.search);
-const subjectPrefix = params.get("subjectPrefix");
-const courseNumber = params.get("courseNumber");
-const professors = params.get("professors").split(",");
-console.log(subjectPrefix, courseNumber, professors);
 
 function getData() {
     return new Promise(async (resolve, reject) => {

@@ -1,6 +1,8 @@
 import { createGradeChart } from "../common/gradeChart.js";
 import { getLocalStorage } from "../localStorage.js";
 
+const trimNonNumerical = new RegExp('\D');
+
 const mockData = {
     professorId: "test",
     professor: "Jason Smith",
@@ -141,8 +143,23 @@ function updateProfessorData(data) {
         $("#prof-difficulty-val").css("color", "red");
     }
 
-    // console.log("Percent is ",data.wouldTakeAgainPercent);
-    let wouldTakePercent = data.wouldTakeAgainPercent && !isNaN(data.wouldTakeAgainPercent) && data.wouldTakeAgainPercent >= 0 ? data.wouldTakeAgainPercent.toFixed(1) : "_";
+    let str = String(data.wouldTakeAgainPercent);
+    str.replace(trimNonNumerical, '');
+    data.wouldTakeAgainPercent = +str;
+
+    let wouldTakePercent = "_";
+
+    if (data.wouldTakeAgainPercent && !isNaN(data.wouldTakeAgainPercent))
+    {
+        if (data.wouldTakeAgainPercent > 0) {
+            wouldTakePercent = data.wouldTakeAgainPercent.toFixed(1);
+        }
+        // Otherwise, it's -1 or undef which means N/A, so keep _
+    }
+    if (String(data.wouldTakeAgainPercent) == "0") {
+        wouldTakePercent = 0;
+    }
+
     $("#prof-would-take-again-val").text(wouldTakePercent);
     if (wouldTakePercent == "_") {
         $("#prof-would-take-again-val").css("color", "black");

@@ -1,7 +1,7 @@
 import { getData, setData } from "../chrome_store.js";
 
 async function settingsClicked() {
-    window.location = "../settingsTab/settingsTab.html";
+    window.location = "../settingsTab/settingsTab.html?callingPage=dashboardTab";
 }
 
 async function helpClicked() {
