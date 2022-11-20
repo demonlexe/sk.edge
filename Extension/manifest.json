@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "sk.edge",
     "description": "the all-in-one registration tool by students, for students",
-    "version": "1.0",
+    "version": "1.01",
     "action": {
       "default_popup": "index.html",
       "default_icon": "./assets/gray.png"
