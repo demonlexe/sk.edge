@@ -1,11 +1,46 @@
 import { createGradeChart } from "../common/gradeChart.js";
 import { getLocalStorage } from "../localStorage.js";
 
+const trimNonNumerical = new RegExp('\D');
+
 const mockData = {
     professorId: "test",
     professor: "Jason Smith",
     rmp: 2.3,
-    rmpTags: ["TOUGH GRADER", "SMART", "HELPFUL", "ENGAGING"],
+    teacherRatingTags: [
+        {
+            "tagCount": 26,
+            "tagName": "Tough grader"
+        },
+        {
+            "tagCount": 3,
+            "tagName": "Get ready to read"
+        },
+        {
+            "tagCount": 3,
+            "tagName": "Participation matters"
+        },
+        {
+            "tagCount": 10,
+            "tagName": "Skip class? You won't pass."
+        },
+        {
+            "tagCount": 2,
+            "tagName": "Tests are tough"
+        },
+        {
+            "tagCount": 1,
+            "tagName": "Tests? Not many"
+        },
+        {
+            "tagCount": 1,
+            "tagName": "Inspirational"
+        },
+        {
+            "tagCount": 6,
+            "tagName": "Lots of homework"
+        }
+    ],
     grades: [{
         section: "007",
         academicSession: "Spring 2021",
@@ -24,6 +59,8 @@ const mockData = {
 	subjectPrefix: "CS",
 	courseNumber: "2337"
 };
+
+const MAX_TAGS_TO_DISPLAY = 6;
 
 const params = new URLSearchParams(document.location.search);
 const professorId = params.get("professorId");
@@ -106,8 +143,23 @@ function updateProfessorData(data) {
         $("#prof-difficulty-val").css("color", "red");
     }
 
-    // console.log("Percent is ",data.wouldTakeAgainPercent);
-    let wouldTakePercent = data.wouldTakeAgainPercent && !isNaN(data.wouldTakeAgainPercent) && data.wouldTakeAgainPercent >= 0 ? data.wouldTakeAgainPercent.toFixed(1) : "_";
+    let str = String(data.wouldTakeAgainPercent);
+    str.replace(trimNonNumerical, '');
+    data.wouldTakeAgainPercent = +str;
+
+    let wouldTakePercent = "_";
+
+    if (data.wouldTakeAgainPercent && !isNaN(data.wouldTakeAgainPercent))
+    {
+        if (data.wouldTakeAgainPercent > 0) {
+            wouldTakePercent = data.wouldTakeAgainPercent.toFixed(1);
+        }
+        // Otherwise, it's -1 or undef which means N/A, so keep _
+    }
+    if (String(data.wouldTakeAgainPercent) == "0") {
+        wouldTakePercent = 0;
+    }
+
     $("#prof-would-take-again-val").text(wouldTakePercent);
     if (wouldTakePercent == "_") {
         $("#prof-would-take-again-val").css("color", "black");
@@ -123,17 +175,18 @@ function updateProfessorData(data) {
         $("#prof-would-take-again-val").css("color", "red");
     }
 
-    // append RMP tags if they exist
-    if (data.rmpTags?.length > 0) {
-        $(`<div id="prof-tag-container" class="col d-flex flex-wrap justify-content-center align-items-center p-0 my-4"></div>`).insertAfter(`#prof-rmp-row-2`);
-        data.rmpTags.forEach((tag) => {
+    // display RMP tags if they exist
+    if (data.teacherRatingTags?.length > 0) {
+        const orderedTags = data.teacherRatingTags.sort((a, b) => b.tagCount - a.tagCount);
+        // loop through ordered tags 
+        for (let i = 0; i < orderedTags.length && i < MAX_TAGS_TO_DISPLAY; i++) {
             $("#prof-tag-container").append(`
-        <button type="button" class="btn btn-light text-wrap" 
-          style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
-          ${tag}
-        </button>
-        `);
-        });
+                <button type="button" class="btn btn-light text-wrap" 
+                style="--bs-btn-padding-y: .3rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem; margin:2px">
+                    ${orderedTags[i].tagName.toUpperCase()}
+                </button>
+            `);
+        };
     }
 
     if (!data.grades || data.grades.length === 0) {

@@ -22,3 +22,8 @@ bradBtn.on("click", () => {
     window.open("https://www.linkedin.com/in/bradwj/","_blank")
     window.close();
 });
+
+$('#nebula-link').on('click', () => {
+    window.open("https://www.utdnebula.com/", "_blank");
+    window.close();
+});

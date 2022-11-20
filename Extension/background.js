@@ -1,3 +1,10 @@
+import { 
+    requestProfessors,
+    fetchNebulaCourse,
+    fetchNebulaProfessor,
+    fetchNebulaSections
+ } from './fetch.js'
+
 chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
     if (
         /^.*:\/\/utdallas\.collegescheduler\.com\/terms\/.*\/courses\/.+$/.test(
@@ -23,6 +30,10 @@ chrome.webNavigation.onHistoryStateUpdated.addListener(function (details) {
 const messageType = {
     SHOW_COURSE_TAB: "SHOW_COURSE_TAB",
     SHOW_PROFESSOR_TAB: "SHOW_PROFESSOR_TAB",
+    REQUEST_PROFESSORS: "REQUEST_PROFESSORS",
+    GET_NEBULA_PROFESSOR: "GET_NEBULA_PROFESSOR",
+    GET_NEBULA_COURSE: "GET_NEBULA_COURSE",
+    GET_NEBULA_SECTIONS: "GET_NEBULA_SECTIONS"
 };
 
 // listen for messages from the content script
@@ -41,6 +52,24 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         case messageType.SHOW_PROFESSOR_TAB:
             // TODO
             break;
+        case messageType.REQUEST_PROFESSORS:
+            requestProfessors(request).then(response => sendResponse(response));
+            return true;
+            break;
+        case messageType.GET_NEBULA_PROFESSOR:
+            fetchNebulaProfessor(request.professorName).then(response => sendResponse(response));
+            return true;
+            break;
+        case messageType.GET_NEBULA_COURSE:
+            fetchNebulaCourse(request.coursePrefix, request.courseNumber).then(response => sendResponse(response));
+            return true;
+            break;
+
+        case messageType.GET_NEBULA_SECTIONS:
+            fetchNebulaSections(request.courseReference, request.professorReference).then(response => sendResponse(response));
+            return true;
+            break;
+
         default:
             console.log("Unknown message type");
     }
