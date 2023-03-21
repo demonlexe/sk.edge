@@ -72,12 +72,16 @@ function getProfessorNames() {
 					const detailLabelText = li.querySelector('strong > span').innerText;
 					if (detailLabelText.includes('Instructor')) {
 						professor = li.innerText.split(":")[1].trim();
-						professors.push(professor);
 					}
 				});
 				// append professor name to the table
 				const newTd = document.createElement('td');
 				newTd.innerText = professor;
+				// if multiple professors
+				const sectionProfessors = professor.split(',');
+				sectionProfessors.forEach(prof => {
+					professors.push(prof.trim())
+				})
 				// append span element with professor as text to the newTd
 				// const newSpan = document.createElement('span');
 				// newSpan.innerText = professor;
